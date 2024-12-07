@@ -8,6 +8,8 @@ public class Bar extends BarGraphics implements Position
     private int type;
     private Board board;
 
+    
+
     public Bar(final Board gui, int num) {
         super(gui, num);
         this.setBlackCount(0);

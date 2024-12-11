@@ -8,6 +8,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.Timer;
 
 public class Game {
 	private Player p1;
@@ -17,6 +18,8 @@ public class Game {
 	private int[] rolls;
 	private ArrayList<Turn> possibleTurns;
 	private int[] score = new int[2];
+	private Timer gameTimer; // Timer to track the game duration
+	private int elapsedTime = 0; // Elapsed time in seconds
 
 	private JFrame frame;
 	private InfoPanel info;
@@ -51,6 +54,10 @@ public class Game {
 		return activePlayer; // מחזיר את השחקן הפעיל
 	}
 
+	public int getelapsedTime() {
+		return elapsedTime;
+	}
+
 	public Board getBoard() {
 		return board;
 	}
@@ -76,9 +83,29 @@ public class Game {
 		possibleTurns = turns;
 	}
 
+	private void startGameTimer() {
+		gameTimer = new Timer(1000, new ActionListener() { // Fires every second
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				elapsedTime++;
+				updateTimerDisplay(); // Update the timer display
+			}
+		});
+		gameTimer.start();
+	}
+
+	public String updateTimerDisplay() {
+		int minutes = elapsedTime / 60;
+		int seconds = elapsedTime % 60;
+		String timeString = String.format("Game Time: %02d:%02d", minutes, seconds);
+		return timeString;
+
+	}
+
 	public void start() {
 		getPlayers();
 		board.setInitialBoard();
+		startGameTimer();
 
 		do {
 			setRolls(new int[] { p1.firstRoll(), p2.firstRoll() });
@@ -137,6 +164,11 @@ public class Game {
 	}
 
 	public void end() {
+		if (gameTimer != null) {
+			gameTimer.stop(); // Stop the timer when the game ends
+		}
+		System.out.println("Game ended. Total time: " + elapsedTime + " seconds");
+
 		JButton replay = new JButton("Replay?");
 		replay.setFont(new Font("Arial", Font.PLAIN, 40));
 		board.setVisible(false);

@@ -65,7 +65,7 @@ public class BoardGeometry
         return new Rectangle(num * (6 * this.getTriangleWidth() + getBarWidth()), 0, this.getBarWidth(), this.getBarHeight());
     }
     
-    private Point getPointPoint(final int pointNumber) {
+    protected Point getPointPoint(final int pointNumber) {
         final boolean isUpper = pointNumber > 12;
         final int ltrIndex = isUpper ? (24 - pointNumber) : (pointNumber - 1);
         final boolean rightOfBar = ltrIndex >= 6;

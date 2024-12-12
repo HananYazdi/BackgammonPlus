@@ -1,19 +1,31 @@
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.geom.Ellipse2D;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 
 public class Triangle extends JComponent implements Position {
-    private final Board board;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	private final Board board;
     private final int pointNumber;
-    private final Polygon polygon;
+    protected final Polygon polygon;
     private PlayerColor pieceColour;
     private int pieceCount;
+    private boolean hasQuestionMark; // Flag to determine if the triangle should show a question mark to do the special logo in the triangle
+    private boolean hasSurpriseMark; // Flag to determine if the triangle should show a Surprise mark to do the special logo in the triangle
     
     public Triangle(int pieceCount, PlayerColor pieceColour, int number, final Board board) {
         this.board = board;
         pointNumber = number;
         this.pieceColour = pieceColour;
         this.pieceCount = pieceCount;
+        hasQuestionMark=false;
+        hasSurpriseMark = false;
 
         this.board.add(this);
         setBounds(Board.getGeometry().getPointRectangle(pointNumber));
@@ -22,7 +34,15 @@ public class Triangle extends JComponent implements Position {
         addMouseListener(new TriangleListener());
     }
 
-    public int getCount(){
+    public boolean isHasQuestionMark() {
+		return hasQuestionMark;
+	}
+
+	public void setHasQuestionMark(boolean hasQuestionMark) {
+		this.hasQuestionMark = hasQuestionMark;
+	}
+
+	public int getCount(){
         return pieceCount;
     }
 
@@ -90,9 +110,24 @@ public class Triangle extends JComponent implements Position {
         g2.setColor(fg);
         g2.fillPolygon(this.polygon);
         this.paintPieces(g2);
+        
+        if (this.hasQuestionMark==true) {//for the special question
+        	paintQuestionMark(g2);
+       }
+        if (this.hasSurpriseMark==true) {//for the special surprise
+        	paintSuprpriseMark(g2);
+       }
     }
     
-    protected void paintPieces(final Graphics2D g2) {
+    public boolean isHasSurpriseMark() {
+		return hasSurpriseMark;
+	}
+
+	public void setHasSurpriseMark(boolean hasSurpriseMark) {
+		this.hasSurpriseMark = hasSurpriseMark;
+	}
+
+	protected void paintPieces(final Graphics2D g2) {
         if (this.pieceCount == 0) return;
 
         final Color diskColour = Palette.getPieceColor(pieceColour);
@@ -114,9 +149,31 @@ public class Triangle extends JComponent implements Position {
         if (count > 1) {
             g2.setColor(textColour);
             g2.drawString(String.format("\u00d7%d", count), (int)(disk.getX() + 3.0), (int)(disk.getY() + 3.0 + disk.getHeight() / 2.0));
+            System.out.println("disk.getX()="+disk.getX()+" disk.getY()=" +disk.getY());
         }
     }
-    
+    //Graphics2D for question
+    protected void paintQuestionMark(Graphics2D g2) {
+
+        // Load the question mark image
+    	Image questionMarkImage = Toolkit.getDefaultToolkit().getImage(Triangle.class.getResource("/images/question-mark-icon-free-vector.jpg"));          
+        // Loop through the array of places (board positions where the question mark should be drawn)
+    	 if(this.getY()<320)
+    		 g2.drawImage(questionMarkImage,0, 0, 50, 50,this);  // Resized to 50x50 for example
+    	 else
+    		 g2.drawImage(questionMarkImage,0, 250, 50, 50,this);  // Resized to 50x50 for example
+    }
+    //Graphics2D for SuprpriseMark
+    protected void paintSuprpriseMark(Graphics2D g2) {
+
+        // Load the question mark image
+    	Image questionMarkImage = Toolkit.getDefaultToolkit().getImage(Triangle.class.getResource("/images/727f347865643fee6d1eb3ae6025d4cb.jpg"));          
+        // Loop through the array of places (board positions where the question mark should be drawn)
+    	 if(this.getY()<320)
+    		 g2.drawImage(questionMarkImage,0, 0, 50, 50,this);  // Resized to 50x50 for example
+    	 else
+    		 g2.drawImage(questionMarkImage,0, 250, 50, 50,this);  // Resized to 50x50 for example
+    }    
     private Polygon getTriangle() {
         final int x1 = 0;
         final int x2 = x1 + this.getWidth();

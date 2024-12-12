@@ -23,7 +23,9 @@ public class InfoPanel extends JPanel {
 	}
 
 	public void updateInfo() {
+
 		int[] r = game.getRolls();
+
 		StringBuilder rollText = new StringBuilder("Moves: ");
 		int[] s = game.getScores();
 		StringBuilder scoreText = new StringBuilder("Score: ");

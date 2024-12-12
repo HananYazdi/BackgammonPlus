@@ -50,6 +50,7 @@ public class Move {
 
 		System.arraycopy(temp, 0, Move.board, 0, temp.length);
 		Move.board[Move.board.length - 1] = b.getBar().getCount(color);
+		System.out.println("board type   " + b.getClass().getSimpleName());
 	}
 
 	public static ArrayList<Turn> reducePossibleTurns(Board b, ArrayList<Turn> turns, Position from, Position to) {
@@ -232,9 +233,14 @@ public class Move {
 	}
 
 	private static boolean isLegalMove(int point, int roll) {
-
 		if (color.equals(PlayerColor.BLACK)) {
 			int destPoint = point - roll;
+			if (destPoint == 24) {
+				return false;
+			}
+			if (destPoint > 24) {
+				destPoint = destPoint - 24;
+			}
 			if (destPoint < 0) {
 				// Check if bearing off is legal
 				destPoint += 24;
@@ -249,9 +255,10 @@ public class Move {
 				}
 
 			}
-			System.out.println("board[destPoint] " + board[destPoint]);
+
 			System.out.println("point " + point);
 			System.out.println("roll " + roll);
+			System.out.println("board[destPoint] " + board[destPoint]);
 			// Cannot move to point with more than one opponent piece
 			if (board[destPoint] > 1) {
 				return false;
@@ -259,6 +266,12 @@ public class Move {
 
 		} else { // WHITE
 			int destPoint = point + roll;
+			if (destPoint == 24) {
+				return false;
+			}
+			if (destPoint < 0) {
+				destPoint = destPoint + 24;
+			}
 
 			if (destPoint > 23) {
 				// Check if bearing off is legal
@@ -276,6 +289,10 @@ public class Move {
 				}
 
 			}
+			System.out.println("point " + point);
+			System.out.println("roll " + roll);
+			System.out.println("board[destPoint] " + board[destPoint]);
+			System.out.println("[destPoint] " + destPoint);
 			if (board[destPoint] > 1)
 				return false;
 		}
@@ -332,9 +349,12 @@ public class Move {
 
 		// If pieces on bar, must move them first
 		if (board[24] != 0 && !b.checkHome(color)) {
-			int startPos = color == PlayerColor.BLACK ? 12 - roll : 11 + roll;
-			if (board[startPos] <= 1)
+			int startPos = color == PlayerColor.BLACK ? (roll > 0 ? 12 - roll : 11 + Math.abs(roll))
+					: (roll > 0 ? 11 + roll : 12 - Math.abs(roll));
+
+			if (board[startPos] <= 1) {
 				moves.add(new Move(intToPosition(24), intToPosition(startPos)));
+			}
 			return moves;
 		}
 

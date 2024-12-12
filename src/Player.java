@@ -31,8 +31,21 @@ public class Player {
 		Dice regularDice = new Dice();
 		dice[0] = regularDice.roll();
 		dice[1] = regularDice.roll();
-
 		// SelectMove(dice1,dice2);
+		return dice;
+	}
+
+	public int RollQuestionTurn() {
+		QuestionDice QuestionDice = new QuestionDice();
+		return QuestionDice.rollQuestionDice();
+	}
+
+	public int[] RollEnhancedDiceTurn() {
+
+		int dice[] = new int[2];
+		EnhancedDice EnhancedDice = new EnhancedDice();
+		dice[0] = EnhancedDice.rollEnhancedDice();
+		dice[1] = EnhancedDice.rollEnhancedDice();
 		return dice;
 	}
 

@@ -9,7 +9,7 @@ import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 
 public class Board extends JPanel {
-	private final Game game;
+	protected final Game game;
 	private final Triangle[] points;
 	private final Bar bar;
 	private final Bar bearOff;
@@ -283,6 +283,10 @@ public class Board extends JPanel {
 						rollDifference = 6;
 					}
 				}
+				if (from.getPointNumber() > to.getPointNumber()
+						&& Math.abs(to.getPointNumber() - from.getPointNumber()) <= 6) {
+					rollDifference = rollDifference * (-1);
+				}
 
 			} else {
 				if (rollDifference > 6) {
@@ -372,6 +376,10 @@ public class Board extends JPanel {
 						rollDifference = 6;
 					}
 				}
+				if (to.getPointNumber() > from.getPointNumber()
+						&& Math.abs(to.getPointNumber() - from.getPointNumber()) <= 6) {
+					rollDifference = rollDifference * (-1);
+				}
 
 			}
 
@@ -431,7 +439,7 @@ public class Board extends JPanel {
 		repaint();
 	}
 
-	private void drawDice(Graphics g, int value, int x, int y) {
+	protected void drawDice(Graphics g, int value, int x, int y) {
 		// Draw die background (white)
 		g.setColor(Color.WHITE);
 		g.fillRect(x, y, 40, 40);
@@ -483,17 +491,19 @@ public class Board extends JPanel {
 	protected void paintComponent(final Graphics g) {
 		final Graphics2D g2 = (Graphics2D) g;
 		super.paintComponent(g2);
-
-		int die1 = game.getRolls()[0];
+		int die1;
+		if (game.getRolls().length == 1) {
+			die1 = game.getRolls()[0];
+			drawDice(g, die1, 250, 300);
+		}
+		// int die1 = game.getRolls()[0];
 		int die2;
 		if (game.getRolls().length == 2) {
 			die2 = game.getRolls()[1];
 			drawDice(g, die2, 670, 300);
-		} else {
-
 		}
 
-		drawDice(g, die1, 250, 300);
+		// drawDice(g, die1, 250, 300);
 
 	}
 }

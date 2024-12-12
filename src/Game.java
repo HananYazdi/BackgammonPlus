@@ -11,21 +11,33 @@ import javax.swing.JPanel;
 import javax.swing.Timer;
 
 public class Game {
-	private Player p1;
-	private Player p2;
-	private Player activePlayer; // משתנה חדש לשחקן הפעיל
-	private Board board;
-	private int[] rolls;
-	private ArrayList<Turn> possibleTurns;
-	private int[] score = new int[2];
-	private Timer gameTimer; // Timer to track the game duration
-	private int elapsedTime = 0; // Elapsed time in seconds
+	protected Player p1;
+	protected Player p2;
+	protected Player activePlayer; // משתנה חדש לשחקן הפעיל
+	protected Board board;
+	protected int[] rolls;
+	protected ArrayList<Turn> possibleTurns;
+	protected int[] score = new int[2];
+	protected Timer gameTimer; // Timer to track the game duration
+	protected int elapsedTime = 0; // Elapsed time in seconds
+	protected JFrame frame;
+	protected InfoPanel info;
+	private Level difficulty;
+	protected int QuestionRoll;
+	// protected int[] rollsEnhancedDice;
 
-	private JFrame frame;
-	private InfoPanel info;
+	public Game(Level difficulty) {
+		this.difficulty = difficulty;
+		if (difficulty == Level.EASY) {
+			board = new Board(this);
+		}
+		if (difficulty == Level.MEDIUM) {
+			board = new MediumBoard(this);
+		}
+		if (difficulty == Level.HARD) {
+			board = new HardBoard(this);
+		}
 
-	public Game() {
-		board = new Board(this);
 		setupFrame();
 	}
 
@@ -66,6 +78,10 @@ public class Game {
 		return info;
 	}
 
+	public Level getDifficulty() {
+		return difficulty;
+	}
+
 	public int[] getRolls() {
 		return rolls;
 	}
@@ -74,6 +90,23 @@ public class Game {
 		this.rolls = rolls;
 		info.updateInfo();
 	}
+
+	public void setQuestionRoll(int QuestionRoll) {
+		this.QuestionRoll = QuestionRoll;
+	}
+
+	public int getQuestionRoll() {
+		return QuestionRoll;
+	}
+
+//	public void setEnhancedDiceRoll(int[] rollsEnhancedDice) {
+//		this.rollsEnhancedDice = rollsEnhancedDice;
+//		info.updateInfo();
+//	}
+//
+//	public int[] getEnhancedDiceRoll() {
+//		return rollsEnhancedDice;
+//	}
 
 	public ArrayList<Turn> getPossibleTurns() {
 		return possibleTurns;
@@ -111,14 +144,171 @@ public class Game {
 			setRolls(new int[] { p1.firstRoll(), p2.firstRoll() });
 		} while (rolls[0] == rolls[1]);
 
-		if (rolls[0] < rolls[1])
+		if (rolls[0] < rolls[1]) {
 			switchActivePlayer();
+		}
+
+		setQuestionRoll(getActivePlayer().RollQuestionTurn());
 
 		info.updateInfo();
 		Turn(p1, p2);
 	}
 
+//	public void Turn(Player active, Player opponent) {
+//		do {
+//			if (rolls.length == 0) {
+//				if (board.countPiecesOut(activePlayer.getColor()) > 8) {
+//					int[] rolls;
+//					do {
+//						rolls = p1.RollTurn(); // הטלת הקוביות
+//					} while (rolls[0] == rolls[1]); // בדיקה אם הערכים זהים (דאבל)
+//
+//					setRolls(rolls);
+//				} else {
+//					setRolls(p1.RollTurn());
+//				}
+//
+//				// setRolls(p1.RollTurn());
+//			}
+//
+//			possibleTurns = Move.getPossibleTurns(board, getActivePlayer().getColor(), rolls[0], rolls[1]);
+//			if (possibleTurns.isEmpty()) {
+//				JOptionPane.showMessageDialog(null,
+//						"you cant move" + rolls[0] + rolls[1] + getActivePlayer().getColor().toString(), "Popup Title",
+//						JOptionPane.INFORMATION_MESSAGE);
+//				switchActivePlayer();
+//				possibleTurns = Move.getPossibleTurns(board, getActivePlayer().getColor(), rolls[0], rolls[1]);
+//
+//			}
+//			if (rolls[0] == rolls[1]) {
+//				setRolls(new int[] { rolls[0], rolls[0], rolls[0], rolls[0] });
+//			}
+//
+//			while (possibleTurns.size() != 0 || rolls.length != 0) {
+//				info.updateInfo();
+//				p1.selectMove(possibleTurns);
+//				// TURN
+//			}
+//
+//			if (Won(active))
+//				break;
+//			switchActivePlayer();
+//		} while (true);
+//
+//		end();
+//		findScore(active, opponent);
+//	}
 	public void Turn(Player active, Player opponent) {
+		switch (difficulty) {
+		case EASY:
+			playEasyTurn(active, opponent);
+			break;
+		case MEDIUM:
+			playMediumTurn(active, opponent);
+			break;
+		case HARD:
+			playHardTurn(active, opponent);
+			break;
+		}
+	}
+
+	private void playMediumTurn(Player active, Player opponent) {
+		do {
+			if (rolls.length == 0) {
+				if (board.countPiecesOut(activePlayer.getColor()) > 8) {
+					int[] rolls;
+					do {
+						rolls = p1.RollTurn(); // הטלת הקוביות
+					} while (rolls[0] == rolls[1]); // בדיקה אם הערכים זהים (דאבל)
+
+					setRolls(rolls);
+					setQuestionRoll(p1.RollQuestionTurn());
+
+				} else {
+					setRolls(p1.RollTurn());
+					setQuestionRoll(p1.RollQuestionTurn());
+				}
+
+				// setRolls(p1.RollTurn());
+			}
+
+			possibleTurns = Move.getPossibleTurns(board, getActivePlayer().getColor(), rolls[0], rolls[1]);
+			if (possibleTurns.isEmpty()) {
+				JOptionPane.showMessageDialog(null,
+						"you cant move" + rolls[0] + rolls[1] + getActivePlayer().getColor().toString(), "Popup Title",
+						JOptionPane.INFORMATION_MESSAGE);
+				switchActivePlayer();
+				possibleTurns = Move.getPossibleTurns(board, getActivePlayer().getColor(), rolls[0], rolls[1]);
+
+			}
+			if (rolls[0] == rolls[1]) {
+				setRolls(new int[] { rolls[0], rolls[0], rolls[0], rolls[0] });
+			}
+
+			while (possibleTurns.size() != 0 || rolls.length != 0) {
+				info.updateInfo();
+				p1.selectMove(possibleTurns);
+				// TURN
+			}
+
+			if (Won(active))
+				break;
+			switchActivePlayer();
+		} while (true);
+
+		end();
+		findScore(active, opponent);
+	}
+
+	private void playHardTurn(Player active, Player opponent) {
+		do {
+			if (rolls.length == 0) {
+				if (board.countPiecesOut(activePlayer.getColor()) > 8) {
+					int[] rolls;
+					do {
+						rolls = p1.RollEnhancedDiceTurn(); // הטלת הקוביות
+					} while (rolls[0] == rolls[1]); // בדיקה אם הערכים זהים (דאבל)
+
+					setRolls(rolls);
+					setQuestionRoll(p1.RollQuestionTurn());
+
+				} else {
+					setRolls(p1.RollEnhancedDiceTurn());
+					setQuestionRoll(p1.RollQuestionTurn());
+				}
+
+				// setRolls(p1.RollTurn());
+			}
+
+			possibleTurns = Move.getPossibleTurns(board, getActivePlayer().getColor(), rolls[0], rolls[1]);
+			if (possibleTurns.isEmpty()) {
+				JOptionPane.showMessageDialog(null,
+						"you cant move" + rolls[0] + rolls[1] + getActivePlayer().getColor().toString(), "Popup Title",
+						JOptionPane.INFORMATION_MESSAGE);
+				switchActivePlayer();
+				possibleTurns = Move.getPossibleTurns(board, getActivePlayer().getColor(), rolls[0], rolls[1]);
+
+			}
+			if (rolls[0] == rolls[1]) {
+				setRolls(new int[] { rolls[0], rolls[0], rolls[0], rolls[0] });
+			}
+
+			while (possibleTurns.size() != 0 || rolls.length != 0) {
+				info.updateInfo();
+				p1.selectMove(possibleTurns);
+				// TURN
+			}
+
+			if (Won(active))
+				break;
+			switchActivePlayer();
+		} while (true);
+
+		end();
+		findScore(active, opponent);
+	}
+
+	private void playEasyTurn(Player active, Player opponent) {
 		do {
 			if (rolls.length == 0) {
 				if (board.countPiecesOut(activePlayer.getColor()) > 8) {
@@ -183,12 +373,12 @@ public class Game {
 		});
 	}
 
-	private void switchActivePlayer() {
+	protected void switchActivePlayer() {
 		// מחליף את השחקן הפעיל
 		activePlayer = (activePlayer == p1) ? p2 : p1;
 	}
 
-	private boolean Won(Player p) {
+	protected boolean Won(Player p) {
 		return board.countPiecesAtHome(p.getColor());
 		// return board.countPieces(p.getColor()) == 0;
 	}

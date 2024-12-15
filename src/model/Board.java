@@ -1,4 +1,5 @@
 package model;
+
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -24,8 +25,8 @@ public class Board extends JPanel {
 	private final Bar bar;
 	private final Bar bearOff;
 	private Position selectedPosition;
-	protected static ArrayList<Integer> placesQuestion;//for places questions
-	protected static Integer placeSurprise;//for surprise place
+	protected static ArrayList<Integer> placesQuestion;// for places questions
+	protected static Integer placeSurprise;// for surprise place
 
 	public Board(Game game) {
 		super(null, true);
@@ -44,9 +45,9 @@ public class Board extends JPanel {
 		for (int i = 0; i < points.length; i++) {
 			points[i] = new Triangle(0, null, i + 1, this);
 		}
-		
-		placesQuestion= new  ArrayList<Integer>();
-		placeSurprise=-1;
+
+		placesQuestion = new ArrayList<Integer>();
+		placeSurprise = -1;
 	}
 
 	public static BoardGeometry getGeometry() {
@@ -108,98 +109,97 @@ public class Board extends JPanel {
 				points[i].setCountAndColor(0, null);
 			}
 		}
-		
+
 		int[] numbers = IsEmptyPlace(points);
-		setPlacesToQuestion(numbers);//places for question			
+		setPlacesToQuestion(numbers);// places for question
 		int[] QuestionBars = toIntArray(placesQuestion);
 		paintQuestion(QuestionBars);
-		int[] result = subtractArrays(numbers, QuestionBars);//for special bar only places that are still available
-		setPlacesToSurprise(result);//place for surprise
-		points[placeSurprise].setHasSurpriseMark(true);//for suprise mark
-		points[placeSurprise].repaint();//to add the paint
-		
+		int[] result = subtractArrays(numbers, QuestionBars);// for special bar only places that are still available
+		setPlacesToSurprise(result);// place for surprise
+		points[placeSurprise].setHasSurpriseMark(true);// for suprise mark
+		points[placeSurprise].repaint();// to add the paint
+
 	}
-	
+
 	public static int[] toIntArray(ArrayList<Integer> list) {
-        // Initialize an int[] with the size of the list
-        int[] result = new int[list.size()];
+		// Initialize an int[] with the size of the list
+		int[] result = new int[list.size()];
 
-        // Copy each element from the ArrayList to the int array
-        for (int i = 0; i < list.size(); i++) {
-            result[i] = list.get(i);
-        }
+		// Copy each element from the ArrayList to the int array
+		for (int i = 0; i < list.size(); i++) {
+			result[i] = list.get(i);
+		}
 
-        return result;
+		return result;
 	}
 
-	public static void setPlacesToQuestion(int[] numbers)
-	{
-	    Random random = new Random();
-	    Set<Integer> chosenNumbers = new HashSet<>();
-	    placesQuestion= new ArrayList<Integer>();
-	    // Randomly pick 3 distinct numbers
-	    while (chosenNumbers.size() < 3) {
-	        int randomIndex = random.nextInt(numbers.length);
-	        chosenNumbers.add(numbers[randomIndex]); // Add to the set
-	        System.out.println(numbers[randomIndex]);
-	        placesQuestion.add(numbers[randomIndex]);
-	    }
-	}
-	public static void setPlacesToSurprise(int[] numbers)
-	{
-	    Random random = new Random();
-	
-	     int randomIndex = random.nextInt(numbers.length);
-	     placeSurprise =(numbers[randomIndex]); // Add to the set
-	}
-	//function for question mark paint when it needed
-	public void paintQuestion(int[] QuestionBars)
-	{
-		System.out.println("entered");
-		for(int i=0; i<QuestionBars.length;i++)
-		{
-			System.out.println("i="+i);
-			points[QuestionBars[i]].setHasQuestionMark(true);
-			points[QuestionBars[i]].repaint();  
+	public static void setPlacesToQuestion(int[] numbers) {
+		Random random = new Random();
+		Set<Integer> chosenNumbers = new HashSet<>();
+		placesQuestion = new ArrayList<Integer>();
+		// Randomly pick 3 distinct numbers
+		while (chosenNumbers.size() < 3) {
+			int randomIndex = random.nextInt(numbers.length);
+			chosenNumbers.add(numbers[randomIndex]); // Add to the set
+			System.out.println(numbers[randomIndex]);
+			placesQuestion.add(numbers[randomIndex]);
 		}
 	}
-	//to know where i can put it
-	public int[] IsEmptyPlace(Triangle[] places)
-	{
+
+	public static void setPlacesToSurprise(int[] numbers) {
+		Random random = new Random();
+
+		int randomIndex = random.nextInt(numbers.length);
+		placeSurprise = (numbers[randomIndex]); // Add to the set
+	}
+
+	// function for question mark paint when it needed
+	public void paintQuestion(int[] QuestionBars) {
+		System.out.println("entered");
+		for (int i = 0; i < QuestionBars.length; i++) {
+			System.out.println("i=" + i);
+			points[QuestionBars[i]].setHasQuestionMark(true);
+			points[QuestionBars[i]].repaint();
+		}
+	}
+
+	// to know where i can put it
+	public int[] IsEmptyPlace(Triangle[] places) {
 		ArrayList<Integer> emptyIndices = new ArrayList<>();
-		    
-		    // Iterate through the array to check for emptiness
-		    for (int i = 0; i < places.length; i++) {
-		        if (places[i].getCount() == 0) { // when the bar is empty
-		            emptyIndices.add(i);
-		        }
-		    }
-		    
-		    // Convert the list to an array and return
-		    return emptyIndices.stream().mapToInt(Integer::intValue).toArray();
+
+		// Iterate through the array to check for emptiness
+		for (int i = 0; i < places.length; i++) {
+			if (places[i].getCount() == 0) { // when the bar is empty
+				emptyIndices.add(i);
+			}
+		}
+
+		// Convert the list to an array and return
+		return emptyIndices.stream().mapToInt(Integer::intValue).toArray();
 	}
-	//to know where i can put the special bar
+
+	// to know where i can put the special bar
 	public static int[] subtractArrays(int[] array1, int[] array2) {
-	    // Convert array1 to a list for easier manipulation
-	    List<Integer> list = new ArrayList<>();
-	    for (int num : array1) {
-	        list.add(num);
-	    }
-	
-	    // Remove all elements from array2
-	    for (int num : array2) {
-	        list.remove(Integer.valueOf(num));
-	    }
-	
-	    // Convert the list back to an array
-	    int[] result = new int[list.size()];
-	    for (int i = 0; i < list.size(); i++) {
-	        result[i] = list.get(i);
-	    }
-	
-	    return result;
+		// Convert array1 to a list for easier manipulation
+		List<Integer> list = new ArrayList<>();
+		for (int num : array1) {
+			list.add(num);
+		}
+
+		// Remove all elements from array2
+		for (int num : array2) {
+			list.remove(Integer.valueOf(num));
+		}
+
+		// Convert the list back to an array
+		int[] result = new int[list.size()];
+		for (int i = 0; i < list.size(); i++) {
+			result[i] = list.get(i);
+		}
+
+		return result;
 	}
-	
+
 	public boolean checkHome(PlayerColor c) { // from liams score increment code
 
 		if (c == PlayerColor.BLACK) {
@@ -605,7 +605,9 @@ public class Board extends JPanel {
 		int die2;
 		if (game.getRolls().length == 2) {
 			die2 = game.getRolls()[1];
+			die1 = game.getRolls()[0];
 			drawDice(g, die2, 670, 300);
+			drawDice(g, die1, 250, 300);
 		}
 
 		// drawDice(g, die1, 250, 300);

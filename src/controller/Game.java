@@ -1,3 +1,4 @@
+package controller;
 import java.awt.BorderLayout;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
@@ -9,6 +10,15 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.Timer;
+
+import model.Board;
+import model.HardBoard;
+import model.Level;
+import model.MediumBoard;
+import model.Move;
+import model.Player;
+import view.InfoPanel;
+import view.PlayerColor;
 
 public class Game {
 	protected Player p1;

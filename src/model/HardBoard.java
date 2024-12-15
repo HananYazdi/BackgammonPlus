@@ -1,6 +1,9 @@
+package model;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+
+import controller.Game;
 
 public class HardBoard extends MediumBoard {
 

@@ -1,3 +1,6 @@
+package controller;
+import model.Move;
+
 public class Turn {
     private Move[] moves;
 

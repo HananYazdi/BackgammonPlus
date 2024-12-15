@@ -1,4 +1,9 @@
+package model;
 import java.util.ArrayList;
+
+import controller.Game;
+import controller.Turn;
+import view.PlayerColor;
 
 public class Player {
 	private PlayerColor playerColor;

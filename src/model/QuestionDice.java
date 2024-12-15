@@ -1,3 +1,4 @@
+package model;
 import java.util.Random;
 
 class QuestionDice extends Dice {

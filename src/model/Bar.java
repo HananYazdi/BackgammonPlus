@@ -1,8 +1,13 @@
+package model;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 
 import javax.swing.BorderFactory;
+
+import controller.TriangleListener;
+import view.BarGraphics;
+import view.PlayerColor;
 
 public class Bar extends BarGraphics implements Position {
 	private int whiteCount;

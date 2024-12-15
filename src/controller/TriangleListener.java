@@ -1,6 +1,11 @@
+package controller;
 import java.awt.Color;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+
+import model.Board;
+import model.Player;
+import model.Position;
 
 public class TriangleListener extends MouseAdapter {
 	@Override

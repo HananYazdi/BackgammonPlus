@@ -1,3 +1,6 @@
+package model;
+import view.PlayerColor;
+
 public interface Position {
     void addPiece(PlayerColor color);
     void removePiece(PlayerColor color);

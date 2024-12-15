@@ -1,4 +1,10 @@
+package model;
 import javax.swing.*;
+
+import controller.TriangleListener;
+import view.Palette;
+import view.PlayerColor;
+
 import java.awt.*;
 import java.awt.geom.Ellipse2D;
 

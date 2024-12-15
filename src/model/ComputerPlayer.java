@@ -1,5 +1,10 @@
+package model;
 import java.util.ArrayList;
 import java.util.Random;
+
+import controller.Game;
+import controller.Turn;
+import view.PlayerColor;
 
 public class ComputerPlayer extends Player{
     private PlayerColor playerColor;

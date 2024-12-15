@@ -1,5 +1,9 @@
+package model;
 import java.util.ArrayList;
 import java.util.Arrays;
+
+import controller.Turn;
+import view.PlayerColor;
 
 public class Move {
 	private Position from;

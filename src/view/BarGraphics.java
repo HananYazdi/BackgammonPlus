@@ -1,3 +1,4 @@
+package view;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -6,7 +7,10 @@ import java.awt.geom.Ellipse2D;
 
 import javax.swing.JPanel;
 
-class BarGraphics extends JPanel {
+import model.Board;
+import model.BoardGeometry;
+
+public class BarGraphics extends JPanel {
 	private Board board;
 
 	public BarGraphics(final Board gui, int num) {

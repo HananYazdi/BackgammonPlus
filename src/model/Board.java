@@ -1,3 +1,4 @@
+package model;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -11,6 +12,11 @@ import java.util.Set;
 
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;
+
+import controller.Game;
+import controller.Turn;
+import view.Palette;
+import view.PlayerColor;
 
 public class Board extends JPanel {
 	protected final Game game;

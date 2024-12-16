@@ -1,4 +1,5 @@
 package model;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -307,7 +308,7 @@ public class Move {
 		ArrayList<Move> moves = new ArrayList<>();
 
 		// וודא שכל האבנים נמצאות בבית
-		if (!b.checkHome(color)) {
+		if (!checkHome(board)) {
 			return moves;
 		}
 
@@ -348,11 +349,49 @@ public class Move {
 		return moves;
 	}
 
+	private static boolean checkHome(int[] board) {
+		if (color == PlayerColor.BLACK) {
+			for (int x = 0; x <= 11; x++) {
+
+				if (board[x] < 0) {
+
+					return false;
+				}
+			}
+			for (int x = 18; x <= 23; x++) {
+
+				if (board[x] < 0) {
+
+					return false;
+				}
+			}
+
+		}
+
+		if (color == PlayerColor.WHITE) {
+			for (int x = 0; x <= 5; x++) {
+
+				if (board[x] < 0) {
+
+					return false;
+				}
+			}
+			for (int x = 12; x <= 23; x++) {
+
+				if (board[x] < 0) {
+
+					return false;
+				}
+			}
+		}
+		return true;
+	}
+
 	private static ArrayList<Move> getNextMove(int[] board, int roll) {
 		ArrayList<Move> moves = new ArrayList<>();
 
 		// If pieces on bar, must move them first
-		if (board[24] != 0 && !b.checkHome(color)) {
+		if (board[24] != 0 && !checkHome(board)) {
 			int startPos = color == PlayerColor.BLACK ? (roll > 0 ? 12 - roll : 11 + Math.abs(roll))
 					: (roll > 0 ? 11 + roll : 12 - Math.abs(roll));
 
@@ -362,7 +401,7 @@ public class Move {
 			return moves;
 		}
 
-		if (b.checkHome(color)) {
+		if (checkHome(board)) {
 			moves = getBearOffMoves(board, roll, color);
 			if (!moves.isEmpty()) {
 				return moves;

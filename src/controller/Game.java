@@ -1,4 +1,5 @@
 package controller;
+
 import java.awt.BorderLayout;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
@@ -224,6 +225,7 @@ public class Game {
 
 	private void playMediumTurn(Player active, Player opponent) {
 		do {
+			boolean flag = false;
 			if (rolls.length == 0) {
 				if (board.countPiecesOut(activePlayer.getColor()) > 8) {
 					int[] rolls;
@@ -258,10 +260,16 @@ public class Game {
 			while (possibleTurns.size() != 0 || rolls.length != 0) {
 				info.updateInfo();
 				p1.selectMove(possibleTurns);
+				if (Won(active)) {
+					flag = true;
+				}
+
 				// TURN
 			}
 
 			if (Won(active))
+				break;
+			if (flag)
 				break;
 			switchActivePlayer();
 		} while (true);
@@ -272,6 +280,7 @@ public class Game {
 
 	private void playHardTurn(Player active, Player opponent) {
 		do {
+			boolean flag = false;
 			if (rolls.length == 0) {
 				if (board.countPiecesOut(activePlayer.getColor()) > 8) {
 					int[] rolls;
@@ -306,10 +315,15 @@ public class Game {
 			while (possibleTurns.size() != 0 || rolls.length != 0) {
 				info.updateInfo();
 				p1.selectMove(possibleTurns);
+				if (Won(active)) {
+					flag = true;
+				}
 				// TURN
 			}
 
 			if (Won(active))
+				break;
+			if (flag)
 				break;
 			switchActivePlayer();
 		} while (true);
@@ -320,6 +334,7 @@ public class Game {
 
 	private void playEasyTurn(Player active, Player opponent) {
 		do {
+			boolean flag = false;
 			if (rolls.length == 0) {
 				if (board.countPiecesOut(activePlayer.getColor()) > 8) {
 					int[] rolls;
@@ -351,10 +366,15 @@ public class Game {
 			while (possibleTurns.size() != 0 || rolls.length != 0) {
 				info.updateInfo();
 				p1.selectMove(possibleTurns);
+				if (Won(active)) {
+					flag = true;
+				}
 				// TURN
 			}
 
 			if (Won(active))
+				break;
+			if (flag)
 				break;
 			switchActivePlayer();
 		} while (true);

@@ -1,4 +1,5 @@
-import controller.Game;
+package controller;
+
 import model.Level;
 
 public class Main {

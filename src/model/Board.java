@@ -27,6 +27,14 @@ public class Board extends JPanel {
 	private Position selectedPosition;
 	protected static ArrayList<Integer> placesQuestion;// for places questions
 	protected static Integer placeSurprise;// for surprise place
+	protected boolean hasSpecial= false;
+	public boolean isHasSpecial() {
+		return hasSpecial;
+	}
+
+	public void setHasSpecial(boolean hasSpecial) {
+		this.hasSpecial = hasSpecial;
+	}
 
 	public Board(Game game) {
 		super(null, true);
@@ -512,7 +520,14 @@ public class Board extends JPanel {
 		to.addPiece(getGame().getActivePlayer().getColor());
 
 		// עדכון הצעדים האפשריים
-
+		System.out.println("to add"+to.getPointNumber());
+		if(points[to.getPointNumber()-1].isHasSurpriseMark())// has special turn
+		{
+			System.out.println("enter::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::");
+			hasSpecial=true;
+			points[to.getPointNumber()-1].setHasSurpriseMark(false);
+			points[to.getPointNumber()-1].repaint();
+		}
 		game.setPossibleTurns(Move.reducePossibleTurns(this, turns, from, to));
 
 		// הצגת הלוח מחדש

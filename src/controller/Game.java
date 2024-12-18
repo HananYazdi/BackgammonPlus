@@ -263,6 +263,13 @@ public class Game {
 
 			if (Won(active))
 				break;
+			if(board.isHasSpecial()==true)
+			{
+				board.setHasSpecial(false);
+				playEasyTurn(active,opponent);
+			}
+			else
+				switchActivePlayer();
 			switchActivePlayer();
 		} while (true);
 
@@ -311,6 +318,13 @@ public class Game {
 
 			if (Won(active))
 				break;
+			if(board.isHasSpecial()==true)
+			{
+				board.setHasSpecial(false);
+				playEasyTurn(active,opponent);
+			}
+			else
+				switchActivePlayer();
 			switchActivePlayer();
 		} while (true);
 

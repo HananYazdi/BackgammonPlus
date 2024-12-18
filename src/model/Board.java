@@ -523,7 +523,6 @@ public class Board extends JPanel {
 		System.out.println("to add"+to.getPointNumber());
 		if(points[to.getPointNumber()-1].isHasSurpriseMark())// has special turn
 		{
-			System.out.println("enter::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::");
 			hasSpecial=true;
 			points[to.getPointNumber()-1].setHasSurpriseMark(false);
 			points[to.getPointNumber()-1].repaint();

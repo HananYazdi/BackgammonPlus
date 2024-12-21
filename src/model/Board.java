@@ -4,21 +4,29 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
 
 import javax.swing.BorderFactory;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import controller.Game;
 import controller.Turn;
 import view.Palette;
 import view.PlayerColor;
-
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonElement;
 public class Board extends JPanel {
 	protected final Game game;
 	private final Triangle[] points;
@@ -34,6 +42,10 @@ public class Board extends JPanel {
 
 	public void setHasSpecial(boolean hasSpecial) {
 		this.hasSpecial = hasSpecial;
+	}
+	
+	public Triangle[] getPoints() {
+		return points;
 	}
 
 	public Board(Game game) {
@@ -526,13 +538,57 @@ public class Board extends JPanel {
 			points[to.getPointNumber()-1].setHasSurpriseMark(false);
 			points[to.getPointNumber()-1].repaint();
 		}
+		if(points[to.getPointNumber()-1].isHasQuestionMark())
+		{
+			QuestionDice d=new QuestionDice();
+			int difficulty=d.rollQuestionDice();
+			try {
+	            // Define the path to your JSON file in the project (e.g., src/questions_scheme.json)
+	            FileReader jsonFile = new FileReader("questions_scheme.json");
 
+	            // Parse the JSON file using Gson
+	            Gson gson = new Gson();
+	            JsonObject rootObject = gson.fromJson(jsonFile, JsonObject.class);
+
+	            // Get the "questions" array from the root object
+	            JsonArray questionsArray = rootObject.getAsJsonArray("questions");
+
+	            // Define the target difficulty level (as an integer)
+	           // int targetDifficulty = 1;  // Example: difficulty = 1
+
+	            // Get filtered questions based on difficulty
+	            List<String> filteredQuestions = getQuestionsByDifficulty(questionsArray, difficulty);
+
+	            // Output the filtered questions in a popup
+	            displayPopup(questionsArray, filteredQuestions, difficulty);
+
+	        } catch (IOException e) {
+	            e.printStackTrace();
+	        }
+		}
 		game.setPossibleTurns(Move.reducePossibleTurns(this, turns, from, to));
 
 		// הצגת הלוח מחדש
 		repaint();
 	}
+	
+	 // Method to filter questions based on difficulty
+    private static List<String> getQuestionsByDifficulty(JsonArray questionsArray, int targetDifficulty) {
+        List<String> filteredQuestions = new ArrayList<>();
 
+        // Loop through each question object in the array
+        for (JsonElement questionElement : questionsArray) {
+            JsonObject questionObject = questionElement.getAsJsonObject();
+            int difficulty = questionObject.get("difficulty").getAsInt();  // Get the difficulty
+
+            // If the difficulty matches the target difficulty, add the question to the list
+            if (difficulty == targetDifficulty) {
+                String question = questionObject.get("question").getAsString();  // Get the question text
+                filteredQuestions.add(question);
+            }
+        }
+        return filteredQuestions;
+    }
 	// **************************************************
 	// GRAPHICS
 	// **************************************************
@@ -627,4 +683,56 @@ public class Board extends JPanel {
 		// drawDice(g, die1, 250, 300);
 
 	}
+	
+	 // Method to display the filtered questions in a popup
+    private static void displayPopup(JsonArray questionsArray, List<String> filteredQuestions, int targetDifficulty) {
+        // Iterate over each filtered question
+        for (String question : filteredQuestions) {
+            // Find the correct answers for the question in the JSON
+            JsonObject questionObject = findQuestionObject(questionsArray, question);
+            JsonArray answers = questionObject.getAsJsonArray("answers");   // Get the answers array
+            int correctAns = questionObject.get("correct_ans").getAsInt(); // Get the correct answer index
+
+            // Create a string to display the question and its options
+            StringBuilder message = new StringBuilder("Question: " + question + "\n\n");
+
+            // Prepare the answer options for the user
+            String[] options = new String[answers.size()];
+            for (int i = 0; i < answers.size(); i++) {
+                options[i] = answers.get(i).getAsString();
+                message.append((i + 1) + ". " + options[i] + "\n");
+            }
+
+            // Display the message in a popup with multiple options (JOptionPane.showOptionDialog)
+            int userChoice = JOptionPane.showOptionDialog(
+                    null,
+                    message.toString(),
+                    "Filtered Questions - Difficulty " + targetDifficulty,
+                    JOptionPane.DEFAULT_OPTION,
+                    JOptionPane.INFORMATION_MESSAGE,
+                    null,
+                    options,
+                    options[0]
+            );
+
+            // Check if the user selected the correct answer
+            if (userChoice == correctAns - 1) {
+                JOptionPane.showMessageDialog(null, "Correct answer!", "Result", JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(null, "Incorrect answer! The correct answer was: " + options[correctAns - 1], "Result", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }
+
+ // Method to find the question object in the JSON by the question text
+    private static JsonObject findQuestionObject(JsonArray questionsArray, String questionText) {
+        for (JsonElement element : questionsArray) {
+            JsonObject questionObject = element.getAsJsonObject();
+            String question = questionObject.get("question").getAsString();
+            if (question.equals(questionText)) {
+                return questionObject;
+            }
+        }
+        return null;  // Should never happen if the data is correct
+    }
 }

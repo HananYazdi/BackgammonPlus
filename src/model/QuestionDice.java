@@ -1,7 +1,7 @@
 package model;
 import java.util.Random;
 
-class QuestionDice extends Dice {
+public class QuestionDice extends Dice {
 	private static final Random rng = new Random();
 
 	// מחזיר את רמת השאלה

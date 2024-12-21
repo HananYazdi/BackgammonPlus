@@ -65,7 +65,7 @@ public class Game {
 		frame.setVisible(true);
 	}
 
-	private void getPlayers() {
+	public void getPlayers() {
 		p1 = new Player(PlayerColor.WHITE, "Player 1", this);
 		p2 = new Player(PlayerColor.BLACK, "Player 2", this);
 		score[0] = p1.getScore();
@@ -421,7 +421,7 @@ public class Game {
 		});
 	}
 
-	protected void switchActivePlayer() {
+	public void switchActivePlayer() {
 		// מחליף את השחקן הפעיל
 		activePlayer = (activePlayer == p1) ? p2 : p1;
 	}

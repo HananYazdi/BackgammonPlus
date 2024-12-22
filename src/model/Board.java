@@ -413,6 +413,11 @@ public class Board extends JPanel {
 						&& Math.abs(to.getPointNumber() - from.getPointNumber()) <= 6) {
 					rollDifference = rollDifference * (-1);
 				}
+				if (from.getPointNumber() < to.getPointNumber()
+						&& Math.abs(to.getPointNumber() - from.getPointNumber()) > 6) {
+					rollDifference = 24 - to.getPointNumber() + from.getPointNumber();
+					rollDifference = rollDifference * (-1);
+				}
 
 			} else {
 				if (rollDifference > 6) {
@@ -676,6 +681,12 @@ public class Board extends JPanel {
 			// int die1 = game.getRolls()[0];
 			int die2;
 			if (game.getRolls().length == 2) {
+				die2 = game.getRolls()[1];
+				die1 = game.getRolls()[0];
+				drawDice(g, die2, 670, 300);
+				drawDice(g, die1, 250, 300);
+			}
+			if (game.getRolls().length == 3) {
 				die2 = game.getRolls()[1];
 				die1 = game.getRolls()[0];
 				drawDice(g, die2, 670, 300);

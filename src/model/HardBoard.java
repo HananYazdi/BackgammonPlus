@@ -117,6 +117,13 @@ public class HardBoard extends MediumBoard {
 			drawEnhancedDice(g, die1, 250, 300);
 		}
 
+		if (game.getRolls().length == 3) {
+			die2 = game.getRolls()[1];
+			drawEnhancedDice(g, die2, 670, 300);
+			die1 = game.getRolls()[0];
+			drawEnhancedDice(g, die1, 250, 300);
+		}
+
 		drawQuestionDice(g, die3, 730, 300);
 	}
 

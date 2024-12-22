@@ -285,7 +285,7 @@ public class Move {
 
 			// Cannot move to point with more than one opponent piece
 
-			if (destPoint > 11 && (point <= 11 && point >= 6)) {
+			if (destPoint > 11 && destPoint < 18 && (point <= 11 && point >= 6)) {
 				if (b.checkHome(color)) {
 					System.out.println("כולם בבית ");
 					return true;
@@ -448,9 +448,13 @@ public class Move {
 			for (int i = 0; i <= 11; i++) {
 				if (board[i] < 0 && isLegalMove(i, roll)) {
 					int destPoint = i + roll;
-					if (destPoint <= 11) {
-						moves.add(new Move(intToPosition(i), intToPosition(destPoint)));
+					if (destPoint < 0) {
+						destPoint = destPoint + 24;
 					}
+					moves.add(new Move(intToPosition(i), intToPosition(destPoint)));
+//					if (destPoint <= 11) {
+//						moves.add(new Move(intToPosition(i), intToPosition(destPoint)));
+//					}
 
 				}
 			}

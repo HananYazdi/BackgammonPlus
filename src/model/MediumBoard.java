@@ -64,6 +64,12 @@ public class MediumBoard extends Board {
 			die2 = game.getRolls()[1];
 			drawDice(g, die2, 670, 300);
 		}
+		if (game.getRolls().length == 3) {
+			die2 = game.getRolls()[1];
+			die1 = game.getRolls()[0];
+			drawDice(g, die2, 670, 300);
+			drawDice(g, die1, 250, 300);
+		}
 
 		drawQuestionDice(g, die3, 730, 300);
 	}

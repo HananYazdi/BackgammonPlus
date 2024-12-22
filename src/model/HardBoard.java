@@ -88,33 +88,36 @@ public class HardBoard extends MediumBoard {
 		}
 	}
 
-	// @Override
+	@Override
 	protected void paintComponent(final Graphics g) {
 		if (g == null)
 			return;
 		final Graphics2D g2 = (Graphics2D) g;
 		super.paintComponent(g2);
 
-		// int die1 = game.getRolls()[0];
+		// Add null checks
+		if (game == null || game.getRolls() == null) {
+			return;
+		}
+
 		int die1;
 		if (game.getRolls().length == 1) {
 			die1 = game.getRolls()[0];
 			drawEnhancedDice(g, die1, 250, 300);
 		}
+
 		int die2;
-		int die3 = game.getQuestionRoll();
+		// Add null check before getting question roll
+		int die3 = game != null ? game.getQuestionRoll() : 0;
+
 		if (game.getRolls().length == 2) {
 			die2 = game.getRolls()[1];
 			drawEnhancedDice(g, die2, 670, 300);
 			die1 = game.getRolls()[0];
 			drawEnhancedDice(g, die1, 250, 300);
-		} else {
-
 		}
 
-		// drawEnhancedDice(g, die1, 250, 300);
 		drawQuestionDice(g, die3, 730, 300);
-
 	}
 
 }

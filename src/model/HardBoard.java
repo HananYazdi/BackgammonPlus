@@ -1,4 +1,5 @@
 package model;
+
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -87,7 +88,7 @@ public class HardBoard extends MediumBoard {
 		}
 	}
 
-	@Override
+	// @Override
 	protected void paintComponent(final Graphics g) {
 		final Graphics2D g2 = (Graphics2D) g;
 		super.paintComponent(g2);

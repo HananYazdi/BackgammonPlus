@@ -126,7 +126,7 @@ public class Move {
 			}
 			for (Turn turn : turns)
 				addTurn(fullList, turn);
-			return;
+			// return;
 		}
 
 		// First scenario: r2 then r1
@@ -271,9 +271,9 @@ public class Move {
 
 		} else { // WHITE
 			int destPoint = point + roll;
-			if (destPoint == 24) {
-				return false;
-			}
+//			if (destPoint == 24) {
+//				return false;
+//			}
 			if (destPoint < 0) {
 				destPoint = destPoint + 24;
 			}

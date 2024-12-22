@@ -538,38 +538,42 @@ public class Board extends JPanel {
 		to.addPiece(getGame().getActivePlayer().getColor());
 
 		// עדכון הצעדים האפשריים
-		if (points[to.getPointNumber() - 1].isHasSurpriseMark())// has special turn
-		{
-			hasSpecial = true;
-			points[to.getPointNumber() - 1].setHasSurpriseMark(false);
-			points[to.getPointNumber() - 1].repaint();
+		if (to.getPointNumber() != 0 && to.getPointNumber() != 25) {
+			if (points[to.getPointNumber() - 1].isHasSurpriseMark())// has special turn
+			{
+				hasSpecial = true;
+				points[to.getPointNumber() - 1].setHasSurpriseMark(false);
+				points[to.getPointNumber() - 1].repaint();
+			}
 		}
-		if (points[to.getPointNumber() - 1].isHasQuestionMark()) {
-			QuestionDice d = new QuestionDice();
-			int difficulty = d.rollQuestionDice();
-			try {
-				// Define the path to your JSON file in the project (e.g.,
-				// src/questions_scheme.json)
-				FileReader jsonFile = new FileReader("questions_scheme.json");
+		if (to.getPointNumber() != 0 && to.getPointNumber() != 25) {
+			if (points[to.getPointNumber() - 1].isHasQuestionMark()) {
+				QuestionDice d = new QuestionDice();
+				int difficulty = d.rollQuestionDice();
+				try {
+					// Define the path to your JSON file in the project (e.g.,
+					// src/questions_scheme.json)
+					FileReader jsonFile = new FileReader("questions_scheme.json");
 
-				// Parse the JSON file using Gson
-				Gson gson = new Gson();
-				JsonObject rootObject = gson.fromJson(jsonFile, JsonObject.class);
+					// Parse the JSON file using Gson
+					Gson gson = new Gson();
+					JsonObject rootObject = gson.fromJson(jsonFile, JsonObject.class);
 
-				// Get the "questions" array from the root object
-				JsonArray questionsArray = rootObject.getAsJsonArray("questions");
+					// Get the "questions" array from the root object
+					JsonArray questionsArray = rootObject.getAsJsonArray("questions");
 
-				// Define the target difficulty level (as an integer)
-				// int targetDifficulty = 1; // Example: difficulty = 1
+					// Define the target difficulty level (as an integer)
+					// int targetDifficulty = 1; // Example: difficulty = 1
 
-				// Get filtered questions based on difficulty
-				List<String> filteredQuestions = getQuestionsByDifficulty(questionsArray, difficulty);
+					// Get filtered questions based on difficulty
+					List<String> filteredQuestions = getQuestionsByDifficulty(questionsArray, difficulty);
 
-				// Output the filtered questions in a popup
-				displayPopup(questionsArray, filteredQuestions, difficulty);
+					// Output the filtered questions in a popup
+					displayPopup(questionsArray, filteredQuestions, difficulty);
 
-			} catch (IOException e) {
-				e.printStackTrace();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
 			}
 		}
 		game.setPossibleTurns(Move.reducePossibleTurns(this, turns, from, to));

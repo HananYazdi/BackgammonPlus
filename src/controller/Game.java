@@ -262,6 +262,7 @@ public class Game {
 				p1.selectMove(possibleTurns);
 				if (Won(active)) {
 					flag = true;
+					break;
 				}
 
 				// TURN
@@ -271,12 +272,10 @@ public class Game {
 				break;
 			if (flag)
 				break;
-			if(board.isHasSpecial()==true)
-			{
+			if (board.isHasSpecial() == true) {
 				board.setHasSpecial(false);
-				playEasyTurn(active,opponent);
-			}
-			else
+				playMediumTurn(active, opponent);
+			} else
 				switchActivePlayer();
 		} while (true);
 
@@ -323,6 +322,7 @@ public class Game {
 				p1.selectMove(possibleTurns);
 				if (Won(active)) {
 					flag = true;
+					break;
 				}
 				// TURN
 			}
@@ -331,12 +331,10 @@ public class Game {
 				break;
 			if (flag)
 				break;
-			if(board.isHasSpecial()==true)
-			{
+			if (board.isHasSpecial() == true) {
 				board.setHasSpecial(false);
-				playEasyTurn(active,opponent);
-			}
-			else
+				playHardTurn(active, opponent);
+			} else
 				switchActivePlayer();
 		} while (true);
 
@@ -380,7 +378,9 @@ public class Game {
 				p1.selectMove(possibleTurns);
 				if (Won(active)) {
 					flag = true;
+					break;
 				}
+
 				// TURN
 			}
 
@@ -388,12 +388,10 @@ public class Game {
 				break;
 			if (flag)
 				break;
-			if(board.isHasSpecial()==true)
-			{
+			if (board.isHasSpecial() == true) {
 				board.setHasSpecial(false);
-				playEasyTurn(active,opponent);
-			}
-			else
+				playEasyTurn(active, opponent);
+			} else
 				switchActivePlayer();
 		} while (true);
 

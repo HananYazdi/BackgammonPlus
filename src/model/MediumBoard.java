@@ -1,4 +1,5 @@
 package model;
+
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -41,27 +42,30 @@ public class MediumBoard extends Board {
 
 	@Override
 	protected void paintComponent(final Graphics g) {
+		if (g == null)
+			return;
 		final Graphics2D g2 = (Graphics2D) g;
 		super.paintComponent(g2);
+
+		// Add null checks
+		if (game == null || game.getRolls() == null) {
+			return;
+		}
 
 		int die1;
 		if (game.getRolls().length == 1) {
 			die1 = game.getRolls()[0];
 			drawDice(g, die1, 250, 300);
 		}
-		// int die1 = game.getRolls()[0];
+
 		int die2;
 		int die3 = game.getQuestionRoll();
 		if (game.getRolls().length == 2) {
 			die2 = game.getRolls()[1];
 			drawDice(g, die2, 670, 300);
-		} else {
-
 		}
 
-		// drawDice(g, die1, 250, 300);
 		drawQuestionDice(g, die3, 730, 300);
-
 	}
 
 }

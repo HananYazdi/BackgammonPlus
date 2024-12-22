@@ -90,6 +90,8 @@ public class HardBoard extends MediumBoard {
 
 	// @Override
 	protected void paintComponent(final Graphics g) {
+		if (g == null)
+			return;
 		final Graphics2D g2 = (Graphics2D) g;
 		super.paintComponent(g2);
 

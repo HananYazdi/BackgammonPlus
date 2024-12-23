@@ -281,7 +281,6 @@ public class Board extends JPanel {
 			for (int x = 0; x <= 23; x++) {
 
 				if (points[x].getCount() != 0 && points[x].getPieceColor() == PlayerColor.WHITE) {
-
 					return false;
 				}
 			}
@@ -290,7 +289,6 @@ public class Board extends JPanel {
 			for (int x = 0; x <= 23; x++) {
 
 				if (points[x].getCount() != 0 && points[x].getPieceColor() == PlayerColor.BLACK) {
-
 					return false;
 				}
 			}
@@ -338,6 +336,8 @@ public class Board extends JPanel {
 							if (i + 1 < rolls.length) {
 								if (rolls[i + 1] == 1) {
 									rollDifference = 1;
+								} else {
+									rollDifference = Math.max(rolls[i + 1], rolls[i]);
 								}
 							} else {
 								rollDifference = rolls[i];
@@ -354,6 +354,8 @@ public class Board extends JPanel {
 							if (i + 1 < rolls.length) {
 								if (rolls[i + 1] == 2) {
 									rollDifference = 2;
+								} else {
+									rollDifference = Math.max(rolls[i + 1], rolls[i]);
 								}
 							} else {
 								rollDifference = rolls[i];
@@ -368,6 +370,8 @@ public class Board extends JPanel {
 							if (i + 1 < rolls.length) {
 								if (rolls[i + 1] == 3) {
 									rollDifference = 3;
+								} else {
+									rollDifference = Math.max(rolls[i + 1], rolls[i]);
 								}
 							} else {
 								rollDifference = rolls[i];
@@ -382,6 +386,8 @@ public class Board extends JPanel {
 							if (i + 1 < rolls.length) {
 								if (rolls[i + 1] == 4) {
 									rollDifference = 4;
+								} else {
+									rollDifference = Math.max(rolls[i + 1], rolls[i]);
 								}
 							} else {
 								rollDifference = rolls[i];
@@ -396,6 +402,8 @@ public class Board extends JPanel {
 							if (i + 1 < rolls.length) {
 								if (rolls[i + 1] == 5) {
 									rollDifference = 5;
+								} else {
+									rollDifference = Math.max(rolls[i + 1], rolls[i]);
 								}
 							} else {
 								rollDifference = rolls[i];
@@ -437,6 +445,8 @@ public class Board extends JPanel {
 							if (i + 1 < rolls.length) {
 								if (rolls[i + 1] == 1) {
 									rollDifference = 1;
+								} else {
+									rollDifference = Math.max(rolls[i + 1], rolls[i]);
 								}
 							} else {
 								rollDifference = rolls[i];
@@ -452,6 +462,8 @@ public class Board extends JPanel {
 							if (i + 1 < rolls.length) {
 								if (rolls[i + 1] == 2) {
 									rollDifference = 2;
+								} else {
+									rollDifference = Math.max(rolls[i + 1], rolls[i]);
 								}
 							} else {
 								rollDifference = rolls[i];
@@ -466,6 +478,8 @@ public class Board extends JPanel {
 							if (i + 1 < rolls.length) {
 								if (rolls[i + 1] == 3) {
 									rollDifference = 3;
+								} else {
+									rollDifference = Math.max(rolls[i + 1], rolls[i]);
 								}
 							} else {
 								rollDifference = rolls[i];
@@ -480,6 +494,8 @@ public class Board extends JPanel {
 							if (i + 1 < rolls.length) {
 								if (rolls[i + 1] == 4) {
 									rollDifference = 4;
+								} else {
+									rollDifference = Math.max(rolls[i + 1], rolls[i]);
 								}
 							} else {
 								rollDifference = rolls[i];
@@ -494,6 +510,8 @@ public class Board extends JPanel {
 							if (i + 1 < rolls.length) {
 								if (rolls[i + 1] == 5) {
 									rollDifference = 5;
+								} else {
+									rollDifference = Math.max(rolls[i + 1], rolls[i]);
 								}
 							} else {
 								rollDifference = rolls[i];
@@ -605,11 +623,7 @@ public class Board extends JPanel {
 
 	public void highlightMoves(Color color) {
 		ArrayList<Turn> turns = getGame().getPossibleTurns();
-//		System.out.println("highlightMoves" + turns.toString());
 		for (Turn turn : turns) {
-//			System.out.println("turn" + turn.toString());
-//			System.out.println("selectedPosition" + selectedPosition.getPointNumber());
-//			System.out.println("getFrom()" + turn.getMoves()[0].getFrom().getPointNumber());
 			if (turn.getMoves()[0].getFrom().getPointNumber() == selectedPosition.getPointNumber())
 
 				turn.getMoves()[0].getTo().addHighlight(color);

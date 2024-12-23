@@ -247,8 +247,8 @@ public class Game {
 			possibleTurns = Move.getPossibleTurns(board, getActivePlayer().getColor(), rolls[0], rolls[1]);
 			if (possibleTurns.isEmpty()) {
 				JOptionPane.showMessageDialog(null,
-						"you cant move" + rolls[0] + rolls[1] + getActivePlayer().getColor().toString(), "Popup Title",
-						JOptionPane.INFORMATION_MESSAGE);
+						"you cant move " + rolls[0] + " " + rolls[1] + getActivePlayer().getColor().toString(),
+						"Popup Title", JOptionPane.INFORMATION_MESSAGE);
 				switchActivePlayer();
 				possibleTurns = Move.getPossibleTurns(board, getActivePlayer().getColor(), rolls[0], rolls[1]);
 
@@ -425,7 +425,8 @@ public class Game {
 	}
 
 	protected boolean Won(Player p) {
-		return board.countPiecesAtHome(p.getColor());
+		return board.getBearOff().getCount(activePlayer.getColor()) == 15;
+		// return board.countPiecesAtHome(p.getColor());
 		// return board.countPieces(p.getColor()) == 0;
 	}
 

@@ -240,17 +240,17 @@ public class Move {
 	private static boolean isLegalMove(int point, int roll) {
 		if (color.equals(PlayerColor.BLACK)) {
 			int destPoint = point - roll;
-			if (destPoint == 24) {
-				return false;
-			}
-			if (destPoint > 24) {
+//			if (destPoint == 24) {
+//				return false;
+//			}
+			if (destPoint >= 24) {
 				destPoint = destPoint - 24;
 			}
 			if (destPoint < 0) {
 				// Check if bearing off is legal
 				destPoint += 24;
 			}
-			if (destPoint < 12 && (point <= 23 && point >= 12)) {
+			if (destPoint < 12 && (point <= 17 && point >= 12)) {
 				if (b.checkHome(color)) {
 					System.out.println("כולם בבית ");
 
@@ -424,6 +424,11 @@ public class Move {
 			for (int i = 23; i >= 12; i--) {
 				if (board[i] < 0 && isLegalMove(i, roll)) {
 					int destPoint = i - roll;
+					if (destPoint > 23) {
+						// Check if bearing off is legal
+						destPoint -= 24;
+						moves.add(new Move(intToPosition(i), intToPosition(destPoint)));
+					}
 					if (destPoint >= 12) {
 						moves.add(new Move(intToPosition(i), intToPosition(destPoint)));
 					}

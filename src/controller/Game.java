@@ -50,6 +50,7 @@ public class Game {
 		}
 
 		setupFrame();
+
 	}
 
 	public void setupFrame() {
@@ -63,6 +64,7 @@ public class Game {
 		frame.add(info, BorderLayout.SOUTH);
 		frame.add(board, BorderLayout.CENTER);
 		frame.setVisible(true);
+
 	}
 
 	public void getPlayers() {

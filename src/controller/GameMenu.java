@@ -147,13 +147,25 @@ public class GameMenu {
 		    @Override
 		    public void actionPerformed(ActionEvent e) {
 		        // הצגת החוקים של המשחק בחלון קופץ
-		        String rules = "Backgammon Rules:\n"
-		                + "1. The game is played between two players.\n"
-		                + "2. Each player takes turns rolling dice and moving their pieces.\n"
-		                + "3. The goal is to move all your pieces off the board before your opponent.\n"
-		                + "4. A piece can be captured if it lands on a spot with a single opponent piece.\n"
-		                + "5. A roll of doubles allows extra moves.\n"
-		                + "6. The game ends when a player has no pieces left on the board.";
+		    	String rules = "Backgammon Rules:\n"
+		                + "1. The game is played between two players, each with 15 pieces of a unique color (black or white).\n"
+		                + "2. The board consists of 24 triangular stations, and players move their pieces in opposite directions: black counterclockwise, white clockwise.\n"
+		                + "3. The goal is to move all your pieces to your home quadrant and then off the board before your opponent.\n"
+		                + "4. Players take turns rolling dice and moving their pieces based on the dice results.\n"
+		                + "5. Dice Types:\n"
+		                + "   - Standard Dice: Used for regular moves (values 1-6).\n"
+		                + "   - Question Dice: Generates a question (easy, medium, or hard) that players must answer correctly to move.\n"
+		                + "   - Enhanced Dice: Includes values from -3 to 6; negative values move pieces backward.\n"
+		                + "6. Special Stations:\n"
+		                + "   - Question Station: Players answer a random question to proceed.\n"
+		                + "   - Surprise Station: Grants an extra turn or other surprise benefits.\n"
+		                + "7. Gameplay Levels:\n"
+		                + "   - Easy: Players use standard dice only.\n"
+		                + "   - Medium: Players use two standard dice and one question die.\n"
+		                + "   - Hard: Players use two enhanced dice and one question die, answering questions correctly to move.\n"
+		                + "8. A piece can be captured if it lands on a spot with a single opponent piece.\n"
+		                + "9. A roll of doubles allows extra moves.\n"
+		                + "10. The game ends when a player removes all their pieces from the board.";
 
 		        JOptionPane.showMessageDialog(main_frame, rules, "Game Rules", JOptionPane.INFORMATION_MESSAGE);
 		    }

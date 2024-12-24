@@ -138,6 +138,27 @@ public class GameMenu {
 
 			}
 		});
+		// צור כפתור "Rules"
+		JButton rules_button = new JButton("Rules"); // כפתור "Rules"
+		backgroundPanel.add(rules_button); // הוסף אותו ללוח
+        rules_button.setBounds(10, 10, 100, 30); // קבע את המיק
+		// הוסף ActionListener לכפתור "Rules"
+		rules_button.addActionListener(new ActionListener() {
+		    @Override
+		    public void actionPerformed(ActionEvent e) {
+		        // הצגת החוקים של המשחק בחלון קופץ
+		        String rules = "Backgammon Rules:\n"
+		                + "1. The game is played between two players.\n"
+		                + "2. Each player takes turns rolling dice and moving their pieces.\n"
+		                + "3. The goal is to move all your pieces off the board before your opponent.\n"
+		                + "4. A piece can be captured if it lands on a spot with a single opponent piece.\n"
+		                + "5. A roll of doubles allows extra moves.\n"
+		                + "6. The game ends when a player has no pieces left on the board.";
+
+		        JOptionPane.showMessageDialog(main_frame, rules, "Game Rules", JOptionPane.INFORMATION_MESSAGE);
+		    }
+		});
+
 		main_frame.setVisible(true);
 		while (true) {
 			// בדוק כאן אם קרה משהו

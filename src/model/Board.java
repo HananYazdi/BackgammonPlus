@@ -28,7 +28,7 @@ import view.Palette;
 import view.PlayerColor;
 
 public class Board extends JPanel {
-	protected final Game game;
+	protected static Game game = null;
 	private final Triangle[] points;
 	private final Bar bar;
 	private final Bar bearOff;
@@ -741,8 +741,18 @@ public class Board extends JPanel {
 
 			// Check if the user selected the correct answer
 			if (userChoice == correctAns - 1) {
+				if (game.getActivePlayer().equals(game.getP1())) {
+					game.getP1().setScore(game.getP1().getScore() + 1);
+				} else {
+					game.getP2().setScore(game.getP2().getScore() + 1);
+				}
 				JOptionPane.showMessageDialog(null, "Correct answer!", "Result", JOptionPane.INFORMATION_MESSAGE);
 			} else {
+				if (game.getActivePlayer().equals(game.getP1())) {
+					game.getP1().setScore(game.getP1().getScore() - 1);
+				} else {
+					game.getP2().setScore(game.getP2().getScore() - 1);
+				}
 				JOptionPane.showMessageDialog(null,
 						"Incorrect answer! The correct answer was: " + options[correctAns - 1], "Result",
 						JOptionPane.ERROR_MESSAGE);

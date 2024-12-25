@@ -37,7 +37,9 @@ public class Game {
 	protected int QuestionRoll;
 	// protected int[] rollsEnhancedDice;
 
-	public Game(Level difficulty) {
+	public Game(Level difficulty, String name1, String name2) {
+		this.p1 = new Player(PlayerColor.WHITE, name1, this); // שחקן ראשון עם הצבע לבן
+		this.p2 = new Player(PlayerColor.BLACK, name2, this); // שחקן שני עם הצבע שחור
 		this.difficulty = difficulty;
 		if (difficulty == Level.EASY) {
 			board = new Board(this);
@@ -48,7 +50,8 @@ public class Game {
 		if (difficulty == Level.HARD) {
 			board = new HardBoard(this);
 		}
-
+		p1.setName(name1);
+		p2.setName(name2);
 		setupFrame();
 
 	}
@@ -68,11 +71,19 @@ public class Game {
 	}
 
 	public void getPlayers() {
-		p1 = new Player(PlayerColor.WHITE, "Player 1", this);
-		p2 = new Player(PlayerColor.BLACK, "Player 2", this);
+//		p1 = new Player(PlayerColor.WHITE, "Player 1", this);
+//		p2 = new Player(PlayerColor.BLACK, "Player 2", this);
 		score[0] = p1.getScore();
 		score[1] = p2.getScore();
 		activePlayer = p1; // הגדרת שחקן פעיל
+	}
+
+	public Player getP1() {
+		return p1;
+	}
+
+	public Player getP2() {
+		return p2;
 	}
 
 	public Player getActivePlayer() {
@@ -282,7 +293,7 @@ public class Game {
 		} while (true);
 
 		end();
-		findScore(active, opponent);
+		// findScore(active, opponent);
 	}
 
 	private void playHardTurn(Player active, Player opponent) {
@@ -341,7 +352,7 @@ public class Game {
 		} while (true);
 
 		end();
-		findScore(active, opponent);
+		// findScore(active, opponent);
 	}
 
 	private void playEasyTurn(Player active, Player opponent) {
@@ -355,6 +366,7 @@ public class Game {
 					} while (rolls[0] == rolls[1]); // בדיקה אם הערכים זהים (דאבל)
 
 					setRolls(rolls);
+
 				} else {
 					setRolls(p1.RollTurn());
 				}
@@ -398,7 +410,7 @@ public class Game {
 		} while (true);
 
 		end();
-		findScore(active, opponent);
+		// findScore(active, opponent);
 	}
 
 	public void end() {
@@ -436,17 +448,24 @@ public class Game {
 		return score;
 	}
 
-	public void findScore(Player p, Player op) {
-		if (board.countPieces(op.getColor()) > 15 && !board.checkHome(op.getColor())) {
-			p.setScore(3);
-		} else {
-			if (board.countPieces(op.getColor()) > 15 && board.checkHome(op.getColor())) {
-				p.setScore(2);
-			} else {
-				p.setScore(1);
-			}
-		}
+	public void setScore(int[] score) {
+		this.p1.setScore(score[0]);
+		this.p2.setScore(score[1]);
+		System.out.println("kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk");
+		info.updateInfo();
 	}
+
+//	public void findScore(Player p, Player op) {
+//		if (board.countPieces(op.getColor()) > 15 && !board.checkHome(op.getColor())) {
+//			p.setScore(3);
+//		} else {
+//			if (board.countPieces(op.getColor()) > 15 && board.checkHome(op.getColor())) {
+//				p.setScore(2);
+//			} else {
+//				p.setScore(1);
+//			}
+//		}
+//	}
 
 	public void choosePlayer() { // work in progress chooseplayer code
 		JFrame c = new JFrame("Choose Player ");

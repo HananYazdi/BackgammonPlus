@@ -1,4 +1,5 @@
 package model;
+
 import java.util.ArrayList;
 
 import controller.Game;
@@ -24,6 +25,10 @@ public class Player {
 
 	public String getName() {
 		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	public int firstRoll() {
@@ -59,7 +64,7 @@ public class Player {
 	}
 
 	public void setScore(int x) {
-		score = score + x;
+		score = x;
 	}
 
 	public void selectMove(ArrayList<Turn> turns) {

@@ -21,6 +21,8 @@ import view.HistoryAndQuestionsMenu;
 public class GameMenu {
 	public static boolean flag;
 	public static Level level;
+	public static String name1;
+	public static String name2;
 
 	public static void main(String[] args) {
 		JFrame main_frame = new JFrame("Backgammon Menu");
@@ -128,6 +130,8 @@ public class GameMenu {
 							JOptionPane.ERROR_MESSAGE);
 					return;
 				}
+				name1 = firstPlayerName;
+				name2 = secondPlayerName;
 				main_frame.dispose();
 
 				// If all inputs are valid, start the game
@@ -142,7 +146,8 @@ public class GameMenu {
 		while (true) {
 			// בדוק כאן אם קרה משהו
 			if (flag) {
-				Game game = new Game(level);
+				System.out.println("Something happened!1");
+				Game game = new Game(level, name1, name2);
 				game.start();
 				System.out.println("Something happened!");
 				break; // או בצע פעולה אחרת

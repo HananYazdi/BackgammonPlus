@@ -1,4 +1,5 @@
 package JUnitTest;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
@@ -21,7 +22,7 @@ public class JunitTest {
 
 	@Before
 	public void setUp() {
-		game = new Game(Level.HARD); // or other levels
+		game = new Game(Level.HARD, "p1", "p2"); // or other levels
 		game.getPlayers();
 		game.start();
 		dice = new Dice();

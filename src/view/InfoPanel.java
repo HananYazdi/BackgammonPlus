@@ -1,4 +1,5 @@
 package view;
+
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
@@ -30,8 +31,11 @@ public class InfoPanel extends JPanel {
 		int[] r = game.getRolls();
 
 		StringBuilder rollText = new StringBuilder("Moves: ");
-		int[] s = game.getScores();
-		StringBuilder scoreText = new StringBuilder("Score: ");
+		int[] s = new int[2];
+		s[0] = game.getP1().getScore();
+		s[1] = game.getP2().getScore();
+		StringBuilder scoreText = new StringBuilder(
+				"Score " + game.getP1().getName() + ", " + game.getP2().getName() + ": ");
 		String t = game.updateTimerDisplay();
 		StringBuilder timeText = new StringBuilder("Time: ");
 		timeText.append(t);

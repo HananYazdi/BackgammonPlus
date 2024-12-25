@@ -1,11 +1,9 @@
 package controller;
 
-import model.Level;
-
 public class Main {
 	public static void main(String[] args) {
-		Game game = new Game(Level.HARD);
-		game.start();
+		// Game game = new Game(Level.HARD);
+		// game.start();
 
 	}
 }

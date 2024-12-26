@@ -729,10 +729,10 @@ public class Board extends JPanel {
 			// Prepare the answer options for the user
 			String[] options = new String[answers.size()];
 			for (int i = 0; i < answers.size(); i++) {
-				options[i] = answers.get(i).getAsString();
-				message.append((i + 1) + ". " + options[i] + "\n");
+		        options[i] = String.valueOf(i + 1); // Use "1", "2", "3", "4" as options
+				message.append((i + 1) + ". " + answers.get(i).getAsString() + "\n");
 			}
-
+			int[] optionsInt = new int[]{1, 2, 3, 4};
 			// Display the message in a popup with multiple options
 			// (JOptionPane.showOptionDialog)
 			int userChoice = JOptionPane.showOptionDialog(null, message.toString(),

@@ -107,8 +107,8 @@ public class GameMenu {
 		start_button.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				String firstPlayerName = first_player_field.getText().trim();
-				String secondPlayerName = second_player_field.getText().trim();
+				String firstPlayerName = first_player_field.getText();
+				String secondPlayerName = second_player_field.getText();
 				String selectedDifficulty = (String) difficulty_combo.getSelectedItem();
 				level = Level.valueOf(selectedDifficulty.toUpperCase());
 
@@ -128,6 +128,11 @@ public class GameMenu {
 				if (selectedDifficulty == null || selectedDifficulty.isEmpty()) {
 					JOptionPane.showMessageDialog(main_frame, "Please select a difficulty level.", "Input Error",
 							JOptionPane.ERROR_MESSAGE);
+					return;
+				}
+				if (secondPlayerName.equals(firstPlayerName)) {
+					JOptionPane.showMessageDialog(main_frame, "Please enter different names.",
+							"Input Error", JOptionPane.ERROR_MESSAGE);
 					return;
 				}
 				name1 = firstPlayerName;

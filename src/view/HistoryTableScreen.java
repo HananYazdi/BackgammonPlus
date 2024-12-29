@@ -13,7 +13,7 @@ public class HistoryTableScreen {
             frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
 
             // Panel with a custom background
-            ImageIcon bgIcon = new ImageIcon("src/images/history.png");
+            ImageIcon bgIcon = new ImageIcon(HistoryAndQuestionsMenu.class.getResource("/images/history.png"));
             Image backgroundImg = bgIcon.getImage();
 
             JPanel backgroundPanel = new JPanel(null) {

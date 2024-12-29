@@ -30,7 +30,7 @@ public class GameMenu {
 		main_frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
 
 		// Load the background image
-		ImageIcon bgIcon = new ImageIcon("src/images/backgammon_image.png");
+		ImageIcon bgIcon = new ImageIcon(GameMenu.class.getResource("/images/backgammon_image.png"));
 		Image backgroundImg = bgIcon.getImage();
 
 		// Create a panel with null layout to place components absolutely

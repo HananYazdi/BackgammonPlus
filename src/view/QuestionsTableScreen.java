@@ -28,7 +28,7 @@ public class QuestionsTableScreen {
             frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
             
             // Panel with a custom background
-            ImageIcon bgIcon = new ImageIcon("src/images/questions.png");
+            ImageIcon bgIcon = new ImageIcon(QuestionsTableScreen.class.getResource("/images/questions.png"));
             Image backgroundImg = bgIcon.getImage();
 
             JPanel backgroundPanel = new JPanel(null) {

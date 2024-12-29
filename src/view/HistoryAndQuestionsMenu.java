@@ -1,6 +1,9 @@
 package view;
 
 import javax.swing.*;
+
+import controller.GameMenu;
+
 import java.awt.*;
 import java.awt.event.*;
 
@@ -11,7 +14,7 @@ public class HistoryAndQuestionsMenu {
         main_frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
 
         // Load the background image from src folder
-        ImageIcon bgIcon = new ImageIcon("src/images/backgammon_History_Questions.png");
+        ImageIcon bgIcon = new ImageIcon(HistoryAndQuestionsMenu.class.getResource("/images/backgammon_History_Questions.png"));
         Image backgroundImg = bgIcon.getImage();
 
         // Create a custom panel with a null layout and a background image

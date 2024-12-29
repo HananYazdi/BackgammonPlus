@@ -112,29 +112,34 @@ public class GameMenu {
 				String selectedDifficulty = (String) difficulty_combo.getSelectedItem();
 				level = Level.valueOf(selectedDifficulty.toUpperCase());
 
-				flag = true;
+		
 
 				// Validations
 				if (firstPlayerName.isEmpty()) {
 					JOptionPane.showMessageDialog(main_frame, "Please enter the name of the first player.",
 							"Input Error", JOptionPane.ERROR_MESSAGE);
+					//flag = false;
 					return;
 				}
 				if (secondPlayerName.isEmpty()) {
 					JOptionPane.showMessageDialog(main_frame, "Please enter the name of the second player.",
 							"Input Error", JOptionPane.ERROR_MESSAGE);
+					//flag = false;
 					return;
 				}
 				if (selectedDifficulty == null || selectedDifficulty.isEmpty()) {
 					JOptionPane.showMessageDialog(main_frame, "Please select a difficulty level.", "Input Error",
 							JOptionPane.ERROR_MESSAGE);
+					//flag = false;
 					return;
 				}
 				if (secondPlayerName.equals(firstPlayerName)) {
 					JOptionPane.showMessageDialog(main_frame, "Please enter different names.",
 							"Input Error", JOptionPane.ERROR_MESSAGE);
+				//	flag = false;
 					return;
 				}
+				flag = true;
 				name1 = firstPlayerName;
 				name2 = secondPlayerName;
 				main_frame.dispose();

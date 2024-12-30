@@ -120,6 +120,7 @@ public class GameMenu {
 					return;
 				}
 				if (secondPlayerName.trim().isEmpty()) {
+
 					JOptionPane.showMessageDialog(main_frame, "Please enter the name of the second player.",
 							"Input Error", JOptionPane.ERROR_MESSAGE);
 					// flag = false;

@@ -3,7 +3,6 @@ package JUnitTest;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-import org.junit.Before;
 import org.junit.Test;
 
 import controller.Game;
@@ -15,26 +14,13 @@ import model.QuestionDice;
 import view.PlayerColor;
 
 public class JunitTest {
-	private Game game;
-	private Dice dice;
-	private QuestionDice questionDice;
-	private EnhancedDice enhancedDice;
-
-	@Before
-	public void setUp() {
-		game = new Game(Level.HARD, "p1", "p2"); // or other levels
-		game.getPlayers();
-		game.start();
-		dice = new Dice();
-		questionDice = new QuestionDice();
-		enhancedDice = new EnhancedDice();
-	}
 
 	// בדיקה 1: לוודא שהמשחק מתחיל עם לוח תקין
 	@Test
 	public void testGameInitialization() {
-
+		Game game = new Game(Level.HARD, "p1", "p2"); // or other levels
 		Board board = game.getBoard();
+		board.setInitialBoard();
 		assertEquals(5, board.getPoints()[0].getCount());
 		assertEquals(PlayerColor.BLACK, board.getPoints()[0].getPieceColor());
 
@@ -62,19 +48,21 @@ public class JunitTest {
 
 	@Test
 	public void testNewBoardHasCorrectCheckerCount() {
-		// בדיקה שהלוח החדש מכיל את המספר הנכון של אבנים
+		Game game = new Game(Level.HARD, "p1", "p2");
+		Board board = game.getBoard();
+		board.setInitialBoard();
 		int totalWhite = 0;
 		int totalBlack = 0;
-		Board board = game.getBoard();
 		totalWhite += board.countPieces(PlayerColor.WHITE);
 		totalBlack += board.countPieces(PlayerColor.BLACK);
-
 		assertEquals(15, totalWhite);
 		assertEquals(15, totalBlack);
+
 	}
 
 	@Test
 	public void testDiceRollRange() {
+		Dice dice = new Dice();
 		// בדיקה שהקוביות מחזירות מספרים בטווח החוקי
 		int value1 = dice.roll();
 		assertTrue(value1 >= 1 && value1 <= 6);
@@ -82,6 +70,7 @@ public class JunitTest {
 
 	@Test
 	public void testDiceRollRangeForQuestionDice() {
+		QuestionDice questionDice = new QuestionDice();
 		// בדיקה שהקוביות מחזירות מספרים בטווח החוקי
 		int value1 = questionDice.rollQuestionDice();
 		assertTrue(value1 >= 1 && value1 <= 3);
@@ -89,6 +78,7 @@ public class JunitTest {
 
 	@Test
 	public void testDiceRollRangeForEnhancedDice() {
+		EnhancedDice enhancedDice = new EnhancedDice();
 		// בדיקה שהקוביות מחזירות מספרים בטווח החוקי
 		int value1 = enhancedDice.rollEnhancedDice();
 		assertTrue(value1 >= -3 && value1 <= 6);
@@ -97,17 +87,16 @@ public class JunitTest {
 	@Test
 	public void testPointsHaveValidColorsOrAreEmpty() {
 		// בדיקה גנרית שמוודאת שכל נקודה בלוח במקום
+		Game game = new Game(Level.HARD, "p1", "p2"); // or other levels
 		Board board = game.getBoard();
-
+		board.setInitialBoard();
 		for (int i = 0; i < board.getPoints().length; i++) {
 			int count = board.getPoints()[i].getCount();
 			PlayerColor color = board.getPoints()[i].getPieceColor();
-
 			if (count > 0) {
 				assertTrue(color == PlayerColor.BLACK || color == PlayerColor.WHITE);
 			}
 		}
 	}
-
 
 }

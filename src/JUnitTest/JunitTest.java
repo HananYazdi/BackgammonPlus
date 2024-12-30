@@ -94,4 +94,20 @@ public class JunitTest {
 		assertTrue(value1 >= -3 && value1 <= 6);
 	}
 
+	@Test
+	public void testPointsHaveValidColorsOrAreEmpty() {
+		// בדיקה גנרית שמוודאת שכל נקודה בלוח במקום
+		Board board = game.getBoard();
+
+		for (int i = 0; i < board.getPoints().length; i++) {
+			int count = board.getPoints()[i].getCount();
+			PlayerColor color = board.getPoints()[i].getPieceColor();
+
+			if (count > 0) {
+				assertTrue(color == PlayerColor.BLACK || color == PlayerColor.WHITE);
+			}
+		}
+	}
+
+
 }

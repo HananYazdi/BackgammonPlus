@@ -390,6 +390,9 @@ public class Move {
 	private static ArrayList<Move> getNextMove(int[] board, int roll) {
 		ArrayList<Move> moves = new ArrayList<>();
 
+		if (board[24] != 0 && roll < 0) {
+			return moves;
+		}
 		// If pieces on bar, must move them first
 		if (board[24] != 0 && !checkHome(board)) {
 			int startPos = color == PlayerColor.BLACK ? (roll > 0 ? 12 - roll : 11 + Math.abs(roll))

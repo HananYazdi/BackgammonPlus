@@ -26,6 +26,8 @@ import model.Level;
 import model.MediumBoard;
 import model.Move;
 import model.Player;
+import model.SysData;
+import model.SysData.GameHistory;
 import view.InfoPanel;
 import view.PlayerColor;
 
@@ -579,17 +581,28 @@ public class Game {
 		// findScore(active, opponent);
 	}
 
+	public static String secondsToTimeFormat(int seconds) {
+		int minutes = seconds / 60; // חישוב הדקות
+		seconds = seconds % 60; // חישוב השניות שנותרו
+		return String.format("%02d:%02d", minutes, seconds); // פורמט של MM:SS
+	}
+
 	public void end() {
 		if (gameTimer != null) {
 			gameTimer.stop(); // Stop the timer when the game ends
 		}
 		System.out.println("Game ended. Total time: " + elapsedTime + " seconds");
-
 		JButton replay = new JButton("Replay?");
 		replay.setFont(new Font("Arial", Font.PLAIN, 40));
 		board.setVisible(false);
 		frame.add(replay, BorderLayout.CENTER);
 		frame.repaint();
+		String winner = getWinner(p1, p2);
+		GameHistory history = new GameHistory(p1.getName(), p2.getName(), winner, difficulty,
+				secondsToTimeFormat(elapsedTime), p1.getScore(), p2.getScore());
+		SysData sysData = new SysData();
+		sysData.addGameHistory(history);
+
 		replay.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -599,12 +612,28 @@ public class Game {
 		});
 	}
 
+	public String getWinner(Player firstPlayer, Player secondPlayer) {
+		// בודק אם השחקן הראשון ניצח
+		if (Won(firstPlayer)) {
+			return firstPlayer.getName(); // מחזיר את שם השחקן הראשון
+		}
+
+		// בודק אם השחקן השני ניצח
+		if (Won(secondPlayer)) {
+			return secondPlayer.getName(); // מחזיר את שם השחקן השני
+		}
+
+		// אם אף שחקן לא ניצח
+		return "No winner yet";
+	}
+
 	public void switchActivePlayer() {
 		// מחליף את השחקן הפעיל
 		activePlayer = (activePlayer == p1) ? p2 : p1;
 	}
 
 	protected boolean Won(Player p) {
+		boolean f = board.getBearOff().getCount(activePlayer.getColor()) == 15;
 		return board.getBearOff().getCount(activePlayer.getColor()) == 15;
 		// return board.countPiecesAtHome(p.getColor());
 		// return board.countPieces(p.getColor()) == 0;
@@ -617,7 +646,6 @@ public class Game {
 	public void setScore(int[] score) {
 		this.p1.setScore(score[0]);
 		this.p2.setScore(score[1]);
-		System.out.println("kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk");
 		info.updateInfo();
 	}
 

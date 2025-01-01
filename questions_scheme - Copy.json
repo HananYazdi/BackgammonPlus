@@ -14,11 +14,6 @@
     "answers" : [ "Name & Consequences and trade-offs of application", "Name & Problem & Solution & Consequences and trade-offs of application", "Problem & Solution", "Name & Problem & Solution" ],
     "difficulty" : 3,
     "correct_ans" : 2
-  }, {
-    "question" : "4",
-    "answers" : [ "a5", "56", "fgh", "a4" ],
-    "difficulty" : 2,
-    "correct_ans" : 2
   } ],
   "gameHistories" : [ {
     "player1Name" : "Alice",

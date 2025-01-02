@@ -8,6 +8,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -28,6 +29,7 @@ import model.Move;
 import model.Player;
 import model.SysData;
 import model.SysData.GameHistory;
+import model.SysData.Question;
 import view.InfoPanel;
 import view.PlayerColor;
 
@@ -247,6 +249,7 @@ public class Game {
 	}
 
 	private void playMediumTurn(Player active, Player opponent) {
+		//SysData sysData = new SysData();
 		do {
 			boolean flag = false;
 			if (rolls.length == 0) {
@@ -257,93 +260,16 @@ public class Game {
 					} while (rolls[0] == rolls[1]); // בדיקה אם הערכים זהים (דאבל)
 
 					setRolls(rolls);
-					int difficulty = p1.RollQuestionTurn();
-					setQuestionRoll(difficulty);
-					System.out.println("question");
-					try {
-						// Define the path to your JSON file in the project (e.g.,
-						// src/questions_scheme.json)
-						FileReader jsonFile = new FileReader("questions_scheme.json");
-						System.out.println("question jsonsss");
-						// Parse the JSON file using Gson
-						Gson gson = new Gson();
-						JsonObject rootObject = gson.fromJson(jsonFile, JsonObject.class);
-
-						// Get the "questions" array from the root object
-						JsonArray questionsArray = rootObject.getAsJsonArray("questions");
-
-						// Define the target difficulty level (as an integer)
-						// int targetDifficulty = 1; // Example: difficulty = 1
-
-						// Get filtered questions based on difficulty
-						List<String> filteredQuestions = getQuestionsByDifficulty(questionsArray, difficulty);
-						System.out.println("json hard");
-						// Output the filtered questions in a popup
-						displayPopup(questionsArray, filteredQuestions, difficulty);
-
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
+					processQuestionTurn();
 				} else {
 					setRolls(p1.RollTurn());
-					int difficulty = p1.RollQuestionTurn();
-					setQuestionRoll(difficulty);
-					System.out.println("question");
-					try {
-						// Define the path to your JSON file in the project (e.g.,
-						// src/questions_scheme.json)
-						FileReader jsonFile = new FileReader("questions_scheme.json");
-						System.out.println("question jsonsss");
-						// Parse the JSON file using Gson
-						Gson gson = new Gson();
-						JsonObject rootObject = gson.fromJson(jsonFile, JsonObject.class);
-
-						// Get the "questions" array from the root object
-						JsonArray questionsArray = rootObject.getAsJsonArray("questions");
-
-						// Define the target difficulty level (as an integer)
-						// int targetDifficulty = 1; // Example: difficulty = 1
-
-						// Get filtered questions based on difficulty
-						List<String> filteredQuestions = getQuestionsByDifficulty(questionsArray, difficulty);
-						System.out.println("json hard");
-						// Output the filtered questions in a popup
-						displayPopup(questionsArray, filteredQuestions, difficulty);
-
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
+					processQuestionTurn();
 				}
 
 				// setRolls(p1.RollTurn());
 			} else {
 
-				int difficulty = p1.RollQuestionTurn();
-				setQuestionRoll(difficulty);
-				try {
-					// Define the path to your JSON file in the project (e.g.,
-					// src/questions_scheme.json)
-					FileReader jsonFile = new FileReader("questions_scheme.json");
-					System.out.println("question jsonsss");
-					// Parse the JSON file using Gson
-					Gson gson = new Gson();
-					JsonObject rootObject = gson.fromJson(jsonFile, JsonObject.class);
-
-					// Get the "questions" array from the root object
-					JsonArray questionsArray = rootObject.getAsJsonArray("questions");
-
-					// Define the target difficulty level (as an integer)
-					// int targetDifficulty = 1; // Example: difficulty = 1
-
-					// Get filtered questions based on difficulty
-					List<String> filteredQuestions = getQuestionsByDifficulty(questionsArray, difficulty);
-					System.out.println("json hard");
-					// Output the filtered questions in a popup
-					displayPopup(questionsArray, filteredQuestions, difficulty);
-
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
+				processQuestionTurn();
 			}
 
 			possibleTurns = Move.getPossibleTurns(board, getActivePlayer().getColor(), rolls[0], rolls[1]);
@@ -386,6 +312,7 @@ public class Game {
 	}
 
 	private void playHardTurn(Player active, Player opponent) {
+		SysData sysData = new SysData();
 		do {
 			boolean flag = false;
 			if (rolls.length == 0) {
@@ -396,93 +323,17 @@ public class Game {
 					} while (rolls[0] == rolls[1]); // בדיקה אם הערכים זהים (דאבל)
 
 					setRolls(rolls);
-					int difficulty = p1.RollQuestionTurn();
-					setQuestionRoll(difficulty);
-					System.out.println("question");
-					try {
-						// Define the path to your JSON file in the project (e.g.,
-						// src/questions_scheme.json)
-						FileReader jsonFile = new FileReader("questions_scheme.json");
-						System.out.println("question jsonsss");
-						// Parse the JSON file using Gson
-						Gson gson = new Gson();
-						JsonObject rootObject = gson.fromJson(jsonFile, JsonObject.class);
-
-						// Get the "questions" array from the root object
-						JsonArray questionsArray = rootObject.getAsJsonArray("questions");
-
-						// Define the target difficulty level (as an integer)
-						// int targetDifficulty = 1; // Example: difficulty = 1
-
-						// Get filtered questions based on difficulty
-						List<String> filteredQuestions = getQuestionsByDifficulty(questionsArray, difficulty);
-						System.out.println("json hard");
-						// Output the filtered questions in a popup
-						displayPopup(questionsArray, filteredQuestions, difficulty);
-
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
+					processQuestionTurn();
 
 				} else {
 					setRolls(p1.RollEnhancedDiceTurn());
-					int difficulty = p1.RollQuestionTurn();
-					setQuestionRoll(difficulty);
-					try {
-						// Define the path to your JSON file in the project (e.g.,
-						// src/questions_scheme.json)
-						FileReader jsonFile = new FileReader("questions_scheme.json");
-
-						// Parse the JSON file using Gson
-						Gson gson = new Gson();
-						JsonObject rootObject = gson.fromJson(jsonFile, JsonObject.class);
-
-						// Get the "questions" array from the root object
-						JsonArray questionsArray = rootObject.getAsJsonArray("questions");
-
-						// Define the target difficulty level (as an integer)
-						// int targetDifficulty = 1; // Example: difficulty = 1
-
-						// Get filtered questions based on difficulty
-						List<String> filteredQuestions = getQuestionsByDifficulty(questionsArray, difficulty);
-						System.out.println("json hard");
-						// Output the filtered questions in a popup
-						displayPopup(questionsArray, filteredQuestions, difficulty);
-
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
+					processQuestionTurn();
 				}
 
 				// setRolls(p1.RollTurn());
 			} else {
 
-				int difficulty = p1.RollQuestionTurn();
-				setQuestionRoll(difficulty);
-				try {
-					// Define the path to your JSON file in the project (e.g.,
-					// src/questions_scheme.json)
-					FileReader jsonFile = new FileReader("questions_scheme.json");
-					System.out.println("question jsonsss");
-					// Parse the JSON file using Gson
-					Gson gson = new Gson();
-					JsonObject rootObject = gson.fromJson(jsonFile, JsonObject.class);
-
-					// Get the "questions" array from the root object
-					JsonArray questionsArray = rootObject.getAsJsonArray("questions");
-
-					// Define the target difficulty level (as an integer)
-					// int targetDifficulty = 1; // Example: difficulty = 1
-
-					// Get filtered questions based on difficulty
-					List<String> filteredQuestions = getQuestionsByDifficulty(questionsArray, difficulty);
-					System.out.println("json hard");
-					// Output the filtered questions in a popup
-					displayPopup(questionsArray, filteredQuestions, difficulty);
-
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
+				processQuestionTurn();
 			}
 
 			possibleTurns = Move.getPossibleTurns(board, getActivePlayer().getColor(), rolls[0], rolls[1]);
@@ -689,53 +540,63 @@ public class Game {
 		c.setVisible(true);
 	}
 
-	private static void displayPopup(JsonArray questionsArray, List<String> filteredQuestions, int targetDifficulty) {
-		System.out.println(
-				"entered00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000");
-		// Iterate over each filtered question
-		for (String question : filteredQuestions) {
-			// Find the correct answers for the question in the JSON
-			JsonObject questionObject = findQuestionObject(questionsArray, question);
-			JsonArray answers = questionObject.getAsJsonArray("answers"); // Get the answers array
-			int correctAns = questionObject.get("correct_ans").getAsInt(); // Get the correct answer index
+	private static void displayPopup(List<Question> listOfQuestions, List<String> filteredQuestions) {
+	    Random random = new Random();
+	    int randomIndex = random.nextInt(filteredQuestions.size());  // Choose a random question from filtered list
+	    String questionText = filteredQuestions.get(randomIndex);
 
-			// Create a string to display the question and its options
-			StringBuilder message = new StringBuilder("Question: " + question + "\n\n");
+	    // Find the Question object that matches the selected question text
+	    Question selectedQuestion = null;
+	    for (Question q : listOfQuestions) {
+	        if (q.getQuestion().equals(questionText)) {
+	            selectedQuestion = q;
+	            break;
+	        }
+	    }
 
-			// Prepare the answer options for the user
-			String[] options = new String[answers.size()];
-			for (int i = 0; i < answers.size(); i++) {
-				options[i] = String.valueOf(i + 1); // Use "1", "2", "3", "4" as options
-				message.append((i + 1) + ". " + answers.get(i).getAsString() + "\n");
-			}
-			int[] optionsInt = new int[] { 1, 2, 3, 4 };
-			// Display the message in a popup with multiple options
-			// (JOptionPane.showOptionDialog)
-			int userChoice = JOptionPane.showOptionDialog(null, message.toString(),
-					"Filtered Questions - Difficulty " + targetDifficulty, JOptionPane.DEFAULT_OPTION,
-					JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
+	    if (selectedQuestion == null) {
+	        System.out.println("Selected question not found!");
+	        return;
+	    }
 
-			// Check if the user selected the correct answer
-			if (userChoice == correctAns - 1) {
-				if (activePlayer.equals(p1)) {
-					p1.setScore(p1.getScore() + 1);
-				} else {
-					p2.setScore(p2.getScore() + 1);
-				}
-				JOptionPane.showMessageDialog(null, "Correct answer!", "Result", JOptionPane.INFORMATION_MESSAGE);
-			} else {
-				if (activePlayer.equals(p1)) {
-					p1.setScore(p1.getScore() - 1);
-				} else {
-					p2.setScore(p2.getScore() - 1);
-					// game.getP2().setScore(game.getP2().getScore() - 1);
-				}
-				JOptionPane.showMessageDialog(null,
-						"Incorrect answer! The correct answer was: " + options[correctAns - 1], "Result",
-						JOptionPane.ERROR_MESSAGE);
-			}
-		}
+	    // Extract answers and the correct answer index from the selected question
+	    List<String> answers = selectedQuestion.getAnswers();
+	    int correctAnsIndex = selectedQuestion.getCorrectAns(); // Assuming it's a 1-based index
+
+	    StringBuilder message = new StringBuilder("Question: " + questionText + "\n\n");
+
+	    // Prepare the answer options for the user
+	    String[] options = new String[answers.size()];
+	    for (int i = 0; i < answers.size(); i++) {
+	        options[i] = String.valueOf(i + 1);
+	        message.append((i + 1) + ". " + answers.get(i) + "\n");
+	    }
+
+	    // Show the question in a popup with options
+	    int userChoice = JOptionPane.showOptionDialog(null, message.toString(),
+	            "Filtered Questions", JOptionPane.DEFAULT_OPTION,
+	            JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
+
+	    // Check if the user selected the correct answer
+	    if (userChoice == correctAnsIndex - 1) {
+	        if (activePlayer.equals(p1)) {
+	        	p1.setScore(p1.getScore() + 1);
+	        } else {
+	        	p2.setScore(p2.getScore() + 1);
+	        }
+	        JOptionPane.showMessageDialog(null, "Correct answer!", "Result", JOptionPane.INFORMATION_MESSAGE);
+	    } else {
+	        if (activePlayer.equals(p1)) {
+	        	p1.setScore(p1.getScore() -1);
+	        } else {
+	        	p2.setScore(p2.getScore() - 1);
+	        }
+	        JOptionPane.showMessageDialog(null,
+	                "Incorrect answer! The correct answer was: " + options[correctAnsIndex - 1], "Result",
+	                JOptionPane.ERROR_MESSAGE);
+	    }
 	}
+
 
 	// Method to find the question object in the JSON by the question text
 	private static JsonObject findQuestionObject(JsonArray questionsArray, String questionText) {
@@ -748,21 +609,47 @@ public class Game {
 		}
 		return null; // Should never happen if the data is correct
 	}
+	//function for the processQuestionTurn
+	public void processQuestionTurn() {
+		SysData sysData = new SysData();
+	    try {
+	        // Roll the question turn to get the difficulty level
+	        int difficulty = p1.RollQuestionTurn();
+	        
+	        // Set the question roll (this might involve some side-effect like UI or game state update)
+	        setQuestionRoll(difficulty);
+	        
+	        // Retrieve the list of questions filtered by the selected difficulty
+	        List<Question> listOfQuestions = sysData.getQuestionsByDifficulty(difficulty);
 
-	private static List<String> getQuestionsByDifficulty(JsonArray questionsArray, int targetDifficulty) {
-		List<String> filteredQuestions = new ArrayList<>();
+	        // If no questions were found, throw an exception (optional, for robust error handling)
+	        if (listOfQuestions == null || listOfQuestions.isEmpty()) {
+	            throw new Exception("No questions available for this difficulty.");
+	        }
+	        
+	        // Create a list of the filtered question texts
+	        List<String> filteredQuestions = new ArrayList<>();
+	        for (Question q : listOfQuestions) {
+	            if (q.getQuestion() == null) {
+	                throw new Exception("Question text is missing for one or more questions.");
+	            }
+	            filteredQuestions.add(q.getQuestion()); // Assuming getQuestion() is available
+	        }
 
-		// Loop through each question object in the array
-		for (JsonElement questionElement : questionsArray) {
-			JsonObject questionObject = questionElement.getAsJsonObject();
-			int difficulty = questionObject.get("difficulty").getAsInt(); // Get the difficulty
+	        // Display the popup for the questions
+	        displayPopup(listOfQuestions, filteredQuestions);
 
-			// If the difficulty matches the target difficulty, add the question to the list
-			if (difficulty == targetDifficulty) {
-				String question = questionObject.get("question").getAsString(); // Get the question text
-				filteredQuestions.add(question);
-			}
-		}
-		return filteredQuestions;
+	    } catch (NullPointerException e) {
+	        // Handle specific NullPointerExceptions (e.g., null data in sysData or Question objects)
+	        JOptionPane.showMessageDialog(null, "Error: A required value was missing. Please check the data.", 
+	                                      "Error", JOptionPane.ERROR_MESSAGE);
+	        e.printStackTrace();
+	    } catch (Exception e) {
+	        // Catch all other exceptions and provide a generic error message
+	        JOptionPane.showMessageDialog(null, "An unexpected error occurred: " + e.getMessage(), 
+	                                      "Error", JOptionPane.ERROR_MESSAGE);
+	        e.printStackTrace();
+	    }
 	}
+
 }

@@ -24,6 +24,7 @@ import com.google.gson.JsonObject;
 
 import controller.Game;
 import controller.Turn;
+import model.SysData.Question;
 import view.Palette;
 import view.PlayerColor;
 
@@ -568,7 +569,43 @@ public class Board extends JPanel {
 			if (points[to.getPointNumber() - 1].isHasQuestionMark()) {
 				QuestionDice d = new QuestionDice();
 				int difficulty = d.rollQuestionDice();
-				try {
+				  try {
+				        // Create the SysData object, which may throw exceptions if there is an issue during initialization
+				        SysData sysData = new SysData();
+				        
+				        // Retrieve the list of questions by difficulty, this could throw an exception if the data is unavailable
+				        List<Question> listOfQuestions = sysData.getQuestionsByDifficulty(difficulty);
+
+				        // Check if no questions were found
+				        if (listOfQuestions == null || listOfQuestions.isEmpty()) {
+				            throw new Exception("No questions found for the given difficulty.");
+				        }
+
+				        // Create a list of filtered question texts
+				        List<String> filteredQuestions = new ArrayList<>();
+				        for (Question q : listOfQuestions) {
+				            // Ensure each question text is available (not null)
+				            if (q.getQuestion() == null) {
+				                throw new Exception("A question text is missing for one of the questions.");
+				            }
+				            filteredQuestions.add(q.getQuestion()); // Add the question text to the list
+				        }
+
+				        // Proceed to display the popup with the list of questions and their texts
+				        displayPopup(listOfQuestions, filteredQuestions);
+
+				    } catch (NullPointerException e) {
+				        // Handle specific cases like null data or objects
+				        JOptionPane.showMessageDialog(null, "Error: A null value was encountered. Please check the data.",
+				                                      "Error", JOptionPane.ERROR_MESSAGE);
+				        e.printStackTrace();
+				    } catch (Exception e) {
+				        // Handle general exceptions (like no questions found, or missing question text)
+				        JOptionPane.showMessageDialog(null, "An unexpected error occurred: " + e.getMessage(),
+				                                      "Error", JOptionPane.ERROR_MESSAGE);
+				        e.printStackTrace();
+				    }
+				/*try {
 					// Define the path to your JSON file in the project (e.g.,
 					// src/questions_scheme.json)
 					FileReader jsonFile = new FileReader("questions_scheme.json");
@@ -591,7 +628,7 @@ public class Board extends JPanel {
 
 				} catch (IOException e) {
 					e.printStackTrace();
-				}
+				}*/
 			}
 		}
 		game.setPossibleTurns(Move.reducePossibleTurns(this, turns, from, to));
@@ -601,7 +638,7 @@ public class Board extends JPanel {
 	}
 
 	// Method to filter questions based on difficulty
-	private static List<String> getQuestionsByDifficulty(JsonArray questionsArray, int targetDifficulty) {
+	/*private static List<String> getQuestionsByDifficulty(JsonArray questionsArray, int targetDifficulty) {
 		List<String> filteredQuestions = new ArrayList<>();
 
 		// Loop through each question object in the array
@@ -616,7 +653,77 @@ public class Board extends JPanel {
 			}
 		}
 		return filteredQuestions;
+	}*/
+	
+	private static void displayPopup(List<Question> listOfQuestions, List<String> filteredQuestions) {
+	    Random random = new Random();
+	    int randomIndex = random.nextInt(filteredQuestions.size());  // Choose a random question from filtered list
+	    String questionText = filteredQuestions.get(randomIndex);
+
+	    // Find the Question object that matches the selected question text
+	    Question selectedQuestion = null;
+	    for (Question q : listOfQuestions) {
+	        if (q.getQuestion().equals(questionText)) {
+	            selectedQuestion = q;
+	            break;
+	        }
+	    }
+
+	    if (selectedQuestion == null) {
+	        System.out.println("Selected question not found!");
+	        return;
+	    }
+
+	    // Extract answers and the correct answer index from the selected question
+	    List<String> answers = selectedQuestion.getAnswers();
+	    int correctAnsIndex = selectedQuestion.getCorrectAns(); // Assuming it's a 1-based index
+
+	    StringBuilder message = new StringBuilder("Question: " + questionText + "\n\n");
+
+	    // Prepare the answer options for the user
+	    String[] options = new String[answers.size()];
+	    for (int i = 0; i < answers.size(); i++) {
+	        options[i] = String.valueOf(i + 1);
+	        message.append((i + 1) + ". " + answers.get(i) + "\n");
+	    }
+
+	    // Show the question in a popup with options
+	    int userChoice = JOptionPane.showOptionDialog(null, message.toString(),
+	            "Filtered Questions", JOptionPane.DEFAULT_OPTION,
+	            JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
+
+	    // Check if the user selected the correct answer
+	    if (userChoice == correctAnsIndex - 1) {
+	        if (game.getActivePlayer().equals(game.getP1())) {
+	            game.getP1().setScore(game.getP1().getScore() + 1);
+	        } else {
+	            game.getP2().setScore(game.getP2().getScore() + 1);
+	        }
+	        JOptionPane.showMessageDialog(null, "Correct answer!", "Result", JOptionPane.INFORMATION_MESSAGE);
+	    } else {
+	        if (game.getActivePlayer().equals(game.getP1())) {
+	            game.getP1().setScore(game.getP1().getScore() - 1);
+	        } else {
+	            game.getP2().setScore(game.getP2().getScore() - 1);
+	        }
+	        JOptionPane.showMessageDialog(null,
+	                "Incorrect answer! The correct answer was: " + options[correctAnsIndex - 1], "Result",
+	                JOptionPane.ERROR_MESSAGE);
+	    }
 	}
+
+	// Method to find the question object in the JSON by the question text
+	private static JsonObject findQuestionObject(JsonArray questionsArray, String questionText) {
+		for (JsonElement element : questionsArray) {
+			JsonObject questionObject = element.getAsJsonObject();
+			String question = questionObject.get("question").getAsString();
+			if (question.equals(questionText)) {
+				return questionObject;
+			}
+		}
+		return null; // Should never happen if the data is correct
+	}
+	
 	// **************************************************
 	// GRAPHICS
 	// **************************************************
@@ -712,63 +819,5 @@ public class Board extends JPanel {
 			}
 		}
 
-	}
-
-	// Method to display the filtered questions in a popup
-	private static void displayPopup(JsonArray questionsArray, List<String> filteredQuestions, int targetDifficulty) {
-		// Iterate over each filtered question
-		for (String question : filteredQuestions) {
-			// Find the correct answers for the question in the JSON
-			JsonObject questionObject = findQuestionObject(questionsArray, question);
-			JsonArray answers = questionObject.getAsJsonArray("answers"); // Get the answers array
-			int correctAns = questionObject.get("correct_ans").getAsInt(); // Get the correct answer index
-
-			// Create a string to display the question and its options
-			StringBuilder message = new StringBuilder("Question: " + question + "\n\n");
-
-			// Prepare the answer options for the user
-			String[] options = new String[answers.size()];
-			for (int i = 0; i < answers.size(); i++) {
-		        options[i] = String.valueOf(i + 1); // Use "1", "2", "3", "4" as options
-				message.append((i + 1) + ". " + answers.get(i).getAsString() + "\n");
-			}
-			int[] optionsInt = new int[]{1, 2, 3, 4};
-			// Display the message in a popup with multiple options
-			// (JOptionPane.showOptionDialog)
-			int userChoice = JOptionPane.showOptionDialog(null, message.toString(),
-					"Filtered Questions - Difficulty " + targetDifficulty, JOptionPane.DEFAULT_OPTION,
-					JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
-
-			// Check if the user selected the correct answer
-			if (userChoice == correctAns - 1) {
-				if (game.getActivePlayer().equals(game.getP1())) {
-					game.getP1().setScore(game.getP1().getScore() + 1);
-				} else {
-					game.getP2().setScore(game.getP2().getScore() + 1);
-				}
-				JOptionPane.showMessageDialog(null, "Correct answer!", "Result", JOptionPane.INFORMATION_MESSAGE);
-			} else {
-				if (game.getActivePlayer().equals(game.getP1())) {
-					game.getP1().setScore(game.getP1().getScore() - 1);
-				} else {
-					game.getP2().setScore(game.getP2().getScore() - 1);
-				}
-				JOptionPane.showMessageDialog(null,
-						"Incorrect answer! The correct answer was: " + options[correctAns - 1], "Result",
-						JOptionPane.ERROR_MESSAGE);
-			}
-		}
-	}
-
-	// Method to find the question object in the JSON by the question text
-	private static JsonObject findQuestionObject(JsonArray questionsArray, String questionText) {
-		for (JsonElement element : questionsArray) {
-			JsonObject questionObject = element.getAsJsonObject();
-			String question = questionObject.get("question").getAsString();
-			if (question.equals(questionText)) {
-				return questionObject;
-			}
-		}
-		return null; // Should never happen if the data is correct
 	}
 }

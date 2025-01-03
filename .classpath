@@ -8,8 +8,8 @@
 	</classpathentry>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry kind="lib" path="gson-2.11.0.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Admin/Downloads/jackson-databind-2.1.4.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Admin/Downloads/jackson-core-2.2.3.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Admin/Downloads/jackson-annotations-2.0.1.jar"/>
+	<classpathentry kind="lib" path="jackson-annotations-2.0.1.jar"/>
+	<classpathentry kind="lib" path="jackson-core-2.2.3.jar"/>
+	<classpathentry kind="lib" path="jackson-databind-2.1.4.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

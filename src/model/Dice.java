@@ -1,11 +1,15 @@
 package model;
 import java.util.Random;
 
-public class Dice {
-	private static final Random rng = new Random();
+public class Dice extends DiceAbstract {
+    @Override
+    protected int getMinValue() {
+        return 1; // מינימום בקוביה רגילה
+    }
 
-	public int roll() {
-		return rng.nextInt(6) + 1;
-	}
+    @Override
+    protected int getMaxValue() {
+        return 6; // מקסימום בקוביה רגילה
+    }
 
 }

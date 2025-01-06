@@ -2,15 +2,18 @@ package model;
 import java.util.Random;
 
 public class EnhancedDice extends Dice {
-	private static final Random rng = new Random();
+    @Override
+    protected int getMinValue() {
+        return -3; // מינימום בקוביה משופרת
+    }
 
-	// Overriding the roll method to provide enhanced dice behavior
-	public int rollEnhancedDice() {
-		int number;
+    @Override
+    protected int getMaxValue() {
+        return 6; // מקסימום בקוביה משופרת
+    }
 
-		do {
-			number = rng.nextInt(10) - 3; // טווח המספרים מ-(-3) עד 6
-		} while (number == 0);
-		return number;
-	}
+    @Override
+    protected boolean isValid(int number) {
+        return number != 0; // מספר חוקי לא יכול להיות 0
+    }
 }

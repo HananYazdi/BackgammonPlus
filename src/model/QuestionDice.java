@@ -2,10 +2,13 @@ package model;
 import java.util.Random;
 
 public class QuestionDice extends Dice {
-	private static final Random rng = new Random();
+    @Override
+    protected int getMinValue() {
+        return 1; // מינימום בקוביה המשופרת
+    }
 
-	// מחזיר את רמת השאלה
-	public int rollQuestionDice() {
-		return rng.nextInt(3) + 1;
-	}
+    @Override
+    protected int getMaxValue() {
+        return 3; // מקסימום בקוביה המשופרת
+    }
 }

@@ -568,7 +568,7 @@ public class Board extends JPanel {
 		if (to.getPointNumber() != 0 && to.getPointNumber() != 25) {
 			if (points[to.getPointNumber() - 1].isHasQuestionMark()) {
 				QuestionDice d = new QuestionDice();
-				int difficulty = d.rollQuestionDice();
+				int difficulty = d.roll();
 				  try {
 				        // Create the SysData object, which may throw exceptions if there is an issue during initialization
 				        SysData sysData = new SysData();

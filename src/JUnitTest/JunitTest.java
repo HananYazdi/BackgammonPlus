@@ -72,7 +72,7 @@ public class JunitTest {
 	public void testDiceRollRangeForQuestionDice() {
 		QuestionDice questionDice = new QuestionDice();
 		// בדיקה שהקוביות מחזירות מספרים בטווח החוקי
-		int value1 = questionDice.rollQuestionDice();
+		int value1 = questionDice.roll();
 		assertTrue(value1 >= 1 && value1 <= 3);
 	}
 
@@ -80,7 +80,7 @@ public class JunitTest {
 	public void testDiceRollRangeForEnhancedDice() {
 		EnhancedDice enhancedDice = new EnhancedDice();
 		// בדיקה שהקוביות מחזירות מספרים בטווח החוקי
-		int value1 = enhancedDice.rollEnhancedDice();
+		int value1 = enhancedDice.roll();
 		assertTrue(value1 >= -3 && value1 <= 6);
 	}
 

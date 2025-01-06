@@ -34,24 +34,34 @@ public class Player {
 	public int firstRoll() {
 		DiceFactory DiceFactory = new DiceFactory();
 		DiceInterface regularDice = DiceFactory.createDice("Dice");
+		ObservableDice observableDice = new ObservableDice(regularDice);
+		DiceStatisticsObserver stats = new DiceStatisticsObserver();
+		observableDice.addObserver(stats);
 		//Dice regularDice = new Dice();
-		return regularDice.roll();
+		return observableDice.roll();
 	}
 
 	public int[] RollTurn() {
 		int dice[] = new int[2];
 		DiceInterface regularDice = DiceFactory.createDice("Dice");
+		ObservableDice observableDice = new ObservableDice(regularDice);
+		DiceStatisticsObserver stats = new DiceStatisticsObserver();
+		observableDice.addObserver(stats);
 		//Dice regularDice = new Dice();
-		dice[0] = regularDice.roll();
-		dice[1] = regularDice.roll();
+		dice[0] = observableDice.roll();
+		dice[1] = observableDice.roll();
 		// SelectMove(dice1,dice2);
 		return dice;
 	}
 
 	public int RollQuestionTurn() {
 		DiceInterface QuestionDice = DiceFactory.createDice("QuestionDice");
+		ObservableDice observableDice = new ObservableDice(QuestionDice);
+		DiceStatisticsObserver stats = new DiceStatisticsObserver();
+
+		observableDice.addObserver(stats);
 		//QuestionDice QuestionDice = new QuestionDice();
-		return QuestionDice.roll();
+		return observableDice.roll();
 	}
 
 	public int[] RollEnhancedDiceTurn() {
@@ -59,9 +69,13 @@ public class Player {
 		int dice[] = new int[2];
 		
 		DiceInterface EnhancedDice = DiceFactory.createDice("EnhancedDice");
+		ObservableDice observableDice = new ObservableDice(EnhancedDice);
+		DiceStatisticsObserver stats = new DiceStatisticsObserver();
+
+		observableDice.addObserver(stats);
 		//EnhancedDice EnhancedDice = new EnhancedDice();
-		dice[0] = EnhancedDice.roll();
-		dice[1] = EnhancedDice.roll();
+		dice[0] = observableDice.roll();
+		dice[1] = observableDice.roll();
 		return dice;
 	}
 

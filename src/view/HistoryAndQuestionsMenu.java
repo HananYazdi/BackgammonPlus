@@ -65,9 +65,13 @@ public class HistoryAndQuestionsMenu {
         });
 
         back_button.addActionListener(e -> {
-            main_frame.dispose();
-
+         //   main_frame.dispose();
+            main_frame.setVisible(false); // Hide the current frame
+        
+			main_frame.dispose(); // Dispose of the current frame
             System.out.println("Back to Main Menu clicked");
+            GameMenu.openMenu();
+         
         });
 
         // Adjust positions when the window is resized

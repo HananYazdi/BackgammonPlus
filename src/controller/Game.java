@@ -12,6 +12,7 @@ import java.util.Random;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.Timer;
@@ -441,30 +442,43 @@ public class Game {
 		seconds = seconds % 60; // חישוב השניות שנותרו
 		return String.format("%02d:%02d", minutes, seconds); // פורמט של MM:SS
 	}
+	
 
 	public void end() {
 		if (gameTimer != null) {
 			gameTimer.stop(); // Stop the timer when the game ends
 		}
 		System.out.println("Game ended. Total time: " + elapsedTime + " seconds");
-		JButton replay = new JButton("Replay?");
-		replay.setFont(new Font("Arial", Font.PLAIN, 40));
-		board.setVisible(false);
-		frame.add(replay, BorderLayout.CENTER);
-		frame.repaint();
+	//	JButton replay = new JButton("Replay?");
+	//	replay.setFont(new Font("Arial", Font.PLAIN, 40));
+	//	board.setVisible(false);
+	//	frame.add(replay, BorderLayout.CENTER);
+		//frame.repaint();
 		String winner = getWinner(p1, p2);
+		
+		
+	    // יצירת תווית שתציג את המנצח
+	    JLabel winnerLabel = new JLabel("Winner: " + winner);
+	    winnerLabel.setFont(new Font("Arial", Font.PLAIN, 40));
+	    winnerLabel.setHorizontalAlignment(JLabel.CENTER);
+
+	    // הסתרת הלוח והוספת תווית המנצח למסך
+	    board.setVisible(false);
+	    frame.add(winnerLabel, BorderLayout.CENTER);
+	    frame.repaint();
+	    
 		GameHistory history = new GameHistory(p1.getName(), p2.getName(), winner, difficulty,
 				secondsToTimeFormat(elapsedTime), p1.getScore(), p2.getScore());
 		SysData sysData = new SysData();
 		sysData.addGameHistory(history);
 
-		replay.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				setupFrame();
-				start();
-			}
-		});
+	//	replay.addActionListener(new ActionListener() {
+	//		@Override
+	//		public void actionPerformed(ActionEvent e) {
+	//			setupFrame();
+	//			start();
+	//		}
+	//	});
 	}
 
 	public String getWinner(Player firstPlayer, Player secondPlayer) {

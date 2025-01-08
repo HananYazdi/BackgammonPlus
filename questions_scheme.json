@@ -10,9 +10,59 @@
     "difficulty" : 2,
     "correct_ans" : 3
   }, {
-    "question" : "4",
-    "answers" : [ "a5", "56", "fgh", "a4" ],
+    "question" : "what are the 4 basic parts of Design Pattern?",
+    "answers" : [ "Name & Consequences and trade-offs of application", "Name & Problem & Solution & Consequences and trade-offs of application", "Problem & Solution", "Name & Problem & Solution" ],
+    "difficulty" : 3,
+    "correct_ans" : 2
+  }, {
+    "question" : "What is the main advantage of the Agile approach compared to traditional development models (e.g., Waterfall)?",
+    "answers" : [ "Complete documentation is written at the beginning of the project", "Reduction in hardware costs", "Dynamic adaptation of requirements throughout the development cycle", "Parallel development of all product stages" ],
     "difficulty" : 2,
+    "correct_ans" : 3
+  }, {
+    "question" : "How often are Scrum meetings held in Agile methodology?",
+    "answers" : [ "Once a month", "Once a week", "Daily", "Only at the end of each Sprint" ],
+    "difficulty" : 1,
+    "correct_ans" : 3
+  }, {
+    "question" : "What is the main characteristic of functional requirements?",
+    "answers" : [ "Requirements related to system performance", "Requirements related to data security", "Requirements that describe actions or services the system should provide", "Requirements that are not measurable" ],
+    "difficulty" : 1,
+    "correct_ans" : 3
+  }, {
+    "question" : "Which of the following describes a non-functional requirement?",
+    "answers" : [ "The system will allow adding a new user", "The system’s response time will not exceed two seconds", "The user can save the file in PDF format", "The system will enable daily automatic backups" ],
+    "difficulty" : 2,
+    "correct_ans" : 2
+  }, {
+    "question" : "What is the main advantage of using closed-ended questions in surveys?",
+    "answers" : [ "Ease of analyzing responses", "Deeper understanding of participants' opinions", "Allowing for free-form answers", "Comprehensive answers to all aspects of the question" ],
+    "difficulty" : 1,
+    "correct_ans" : 1
+  }, {
+    "question" : "What is one of the main challenges in creating an effective survey?",
+    "answers" : [ "Shortening the time required to complete the survey", "Defining the target audience precisely", "Creating only open-ended questions", "Using technical language" ],
+    "difficulty" : 2,
+    "correct_ans" : 2
+  }, {
+    "question" : "What is the primary purpose of design patterns in software architecture?",
+    "answers" : [ "To replace documentation", "To provide proven solutions to recurring design problems", "To replace development teams", "To increase the number of bugs" ],
+    "difficulty" : 2,
+    "correct_ans" : 2
+  }, {
+    "question" : "What is the 'Separation of Concerns' principle in architecture?",
+    "answers" : [ "Combining all functions into a single file", "Dividing the system into independent modules with clear responsibilities", "Developing all components by the same team", "Avoiding code documentation" ],
+    "difficulty" : 3,
+    "correct_ans" : 2
+  }, {
+    "question" : "What is one of the main goals of preventive software maintenance?",
+    "answers" : [ "Fixing existing bugs in the system", "Preventing future failures and improving performance", "Replacing development teams", "Reducing hardware costs" ],
+    "difficulty" : 2,
+    "correct_ans" : 2
+  }, {
+    "question" : "Which type of maintenance is performed when bugs are discovered after the system goes live?",
+    "answers" : [ "Preventive maintenance", "Corrective maintenance", "Adaptive maintenance", "Upgrade maintenance" ],
+    "difficulty" : 1,
     "correct_ans" : 2
   } ],
   "gameHistories" : [ {
@@ -40,12 +90,20 @@
     "player1Score" : 15,
     "player2Score" : 9
   }, {
-    "player1Name" : "d",
-    "player2Name" : "f",
-    "winner" : "d",
+    "player1Name" : "roni",
+    "player2Name" : "tom",
+    "winner" : "roni",
     "difficultyLevel" : "EASY",
-    "gameTime" : "209",
-    "player1Score" : 1,
+    "gameTime" : "04:43",
+    "player1Score" : -4,
+    "player2Score" : -3
+  }, {
+    "player1Name" : "ori",
+    "player2Name" : "yosi",
+    "winner" : "ori",
+    "difficultyLevel" : "EASY",
+    "gameTime" : "03:45",
+    "player1Score" : -3,
     "player2Score" : -3
   } ]
 }

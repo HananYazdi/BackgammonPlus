@@ -263,9 +263,9 @@ public class QuestionsTableScreen {
 					question.setDifficulty(difficulty);
 					question.setCorrectAns(correctAnswer); // הגדרת התשובה הנכונה
 
-					// הוספת השאלה דרך SysData
-					SysData sysData = new SysData(); // יצירת מופע של SysData
+				
 					sysData.addQuestion(question);
+					tableModel.addRow(new Object[] {sysData.getQuestions().size(), question.getQuestion(),answers.get(0),answers.get(1),answers.get(2),answers.get(3),correctAnswerStr, question.getDifficulty() });
 				}
 			});
 			

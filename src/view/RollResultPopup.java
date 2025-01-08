@@ -86,7 +86,7 @@ public class RollResultPopup {
                 panel.add(player2Label, gbc);
 
                 // Add winner label
-                JLabel winnerLabel = new JLabel("Winner: " + winner);
+                JLabel winnerLabel = new JLabel("The Beginner Is: " + winner);
                 winnerLabel.setFont(new Font("Arial", Font.BOLD, 18));
                 winnerLabel.setForeground(Color.YELLOW);
                 gbc.gridx = 0;

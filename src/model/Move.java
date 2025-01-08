@@ -305,49 +305,55 @@ public class Move {
 	}
 
 	private static ArrayList<Move> getBearOffMoves(int[] board, int roll, PlayerColor color) {
-		ArrayList<Move> moves = new ArrayList<>();
+	    ArrayList<Move> moves = new ArrayList<>();
 
-		// וודא שכל האבנים נמצאות בבית
-		if (!checkHome(board)) {
-			return moves;
-		}
+	    // וודא שכל האבנים נמצאות בבית
+	    if (!checkHome(board)) {
+	        return moves;
+	    }
 
-		int startIndex = color == PlayerColor.BLACK ? 12 : 6;
-		int endIndex = color == PlayerColor.BLACK ? 17 : 11;
+	    int startIndex = (color == PlayerColor.BLACK) ? 17 : 6;
+	    int endIndex = (color == PlayerColor.BLACK) ? 12 : 11;
+	    boolean isBlack = (color == PlayerColor.BLACK);
 
-		// בדוק אם ניתן להוציא אבן בדיוק עם המספר שנגלל
-		for (int i = startIndex; i <= endIndex; i++) {
-			if (board[i] < 0) {
-				int distance = color == PlayerColor.BLACK ? Math.abs(11 - i) : Math.abs(i - 12);
-				if (distance == roll) {
-					moves.add(new Move(intToPosition(i), b.getBearOff()));
-					return moves;
-				}
-			}
-		}
+	    // בדוק אם ניתן להוציא אבן בדיוק עם המספר שנגלל
+	    for (int i = startIndex; isBlack ? i >= endIndex : i <= endIndex; i += isBlack ? -1 : 1) {
+	        if (board[i] < 0) { // אם יש אבן בנקודה הזו
+	            int distance = isBlack ? Math.abs(11 - i) : Math.abs(i - 12);
+	            if (distance == roll) { // אם המרחק תואם לגלגול
+	                moves.add(new Move(intToPosition(i), b.getBearOff()));
+	                return moves;
+	            }
+	        }
+	    }
 
-		// אם לא ניתן להוציא, נסה להזיז אבן בתוך הבית
-		for (int i = startIndex; i <= endIndex; i++) {
-			if (board[i] < 0 && isLegalMove(i, roll)) {
-				int destPoint = color == PlayerColor.BLACK ? Math.abs(i - roll) : Math.abs(i + roll);
+	    // נסה להזיז אבן בתוך הבית או להוציא אותה
+	    for (int i = startIndex; isBlack ? i >= endIndex : i <= endIndex; i += isBlack ? -1 : 1) {
+	        if (board[i] < 0 && isLegalMove(i, roll)) {
+	            int destPoint = isBlack ? (i - roll) : (i + roll);
 
-				// וודא שההזחה נשארת בתחום הבית
-				if ((color == PlayerColor.BLACK && destPoint >= 12)
-						|| (color == PlayerColor.WHITE && destPoint <= 11)) {
-					moves.add(new Move(intToPosition(i), intToPosition(destPoint)));
-					// return moves;
-				} else {
-					if ((color == PlayerColor.BLACK && destPoint < 12)
-							|| (color == PlayerColor.WHITE && destPoint > 11)) {
-						moves.add(new Move(intToPosition(i), b.getBearOff()));
-						// return moves;
-					}
-				}
-			}
-		}
+	            // אם ההזחה נשארת בתחום הבית
+	            if ((isBlack && destPoint >= 12) || (!isBlack && destPoint <= 11)) {
+	                moves.add(new Move(intToPosition(i), intToPosition(destPoint)));
+	            } else { // בדוק אם ניתן להוציא את האבן
+	                boolean flag = true;
+	                for (int j = isBlack ? 17 : 6; isBlack ? j > i : j < i; j += isBlack ? -1 : 1) {
+	                    if (board[j] != 0) { // אם יש אבנים מאחוריה
+	                        flag = false;
+	                        break;
+	                    }
+	                }
+	                if (flag) { // אם ניתן להוציא את האבן
+	                    moves.add(new Move(intToPosition(i), b.getBearOff()));
+	                    return moves;
+	                }
+	            }
+	        }
+	    }
 
-		return moves;
+	    return moves;
 	}
+
 
 	private static boolean checkHome(int[] board) {
 		if (color == PlayerColor.BLACK) {

@@ -70,7 +70,7 @@ public class HistoryAndQuestionsMenu {
         
 			main_frame.dispose(); // Dispose of the current frame
             System.out.println("Back to Main Menu clicked");
-            GameMenu.openMenu();
+            
          
         });
 

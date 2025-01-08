@@ -2,182 +2,204 @@ package controller;
 
 import java.awt.Graphics;
 import java.awt.Image;
-import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
+
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+
 import model.Level;
 import view.HistoryAndQuestionsMenu;
 
 public class GameMenu {
-    private JFrame mainFrame;
-    private JTextField firstPlayerField;
-    private JTextField secondPlayerField;
-    private JComboBox<String> difficultyCombo;
-    private String name1;
-    private String name2;
-    private Level level;
-    
-    public GameMenu() {
-        initializeFrame();
-        initializeComponents();
-        setupLayout();
-        addListeners();
-        mainFrame.setVisible(true);
-    }
+	public static boolean flag;
+	public static Level level;
+	public static String name1;
+	public static String name2;
 
-    private void initializeFrame() {
-        mainFrame = new JFrame("Backgammon Menu");
-        mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        mainFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
-        
-        // Set up background
-        ImageIcon bgIcon = new ImageIcon(getClass().getResource("/images/backgammon_image.png"));
-        Image backgroundImg = bgIcon.getImage();
-        
-        JPanel backgroundPanel = new JPanel(null) {
-            @Override
-            protected void paintComponent(Graphics g) {
-                super.paintComponent(g);
-                g.drawImage(backgroundImg, 0, 0, getWidth(), getHeight(), this);
-            }
-        };
-        
-        mainFrame.setContentPane(backgroundPanel);
-    }
+	public static void main(String[] args) {
+		JFrame main_frame = new JFrame("Backgammon Menu");
+		main_frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		main_frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
 
-    private void initializeComponents() {
-        firstPlayerField = new JTextField();
-        secondPlayerField = new JTextField();
-        difficultyCombo = new JComboBox<>(new String[]{"EASY", "MEDIUM", "HARD"});
-    }
+		// Load the background image
+		ImageIcon bgIcon = new ImageIcon(GameMenu.class.getResource("/images/backgammon_image.png"));
+		Image backgroundImg = bgIcon.getImage();
 
-    private void setupLayout() {
-        JPanel contentPanel = (JPanel) mainFrame.getContentPane();
-        
-        // Add all components
-        contentPanel.add(firstPlayerField);
-        contentPanel.add(secondPlayerField);
-        contentPanel.add(difficultyCombo);
-        
-        // Add buttons
-        JButton startButton = createButton("Start", e -> handleStartGame());
-        JButton historyButton = createButton("History & Questions", e -> openHistoryMenu());
-        JButton rulesButton = createButton("Rules", e -> showRules());
-        
-        contentPanel.add(startButton);
-        contentPanel.add(historyButton);
-        contentPanel.add(rulesButton);
-        
-        // Initial positioning
-        mainFrame.addComponentListener(new ComponentAdapter() {
-            @Override
-            public void componentResized(ComponentEvent e) {
-                updateComponentPositions(startButton, historyButton, rulesButton);
-            }
-        });
-    }
+		// Create a panel with null layout to place components absolutely
+		JPanel backgroundPanel = new JPanel(null) {
+			@Override
+			protected void paintComponent(Graphics g) {
+				super.paintComponent(g);
+				int w = getWidth();
+				int h = getHeight();
+				// Draw the image to fill the entire panel
+				g.drawImage(backgroundImg, 0, 0, w, h, this);
+			}
+		};
 
-    private JButton createButton(String text, java.awt.event.ActionListener listener) {
-        JButton button = new JButton(text);
-        button.addActionListener(listener);
-        return button;
-    }
+		main_frame.setContentPane(backgroundPanel);
 
-    private void updateComponentPositions(JButton startButton, JButton historyButton, JButton rulesButton) {
-        int width = mainFrame.getWidth();
-        int height = mainFrame.getHeight();
-        
-        int fieldWidth = (int)(width * 0.1);
-        int fieldHeight = 30;
-        
-        // Position text fields
-        firstPlayerField.setBounds((int)(width * 0.2), (int)(height * 0.5), fieldWidth, fieldHeight);
-        secondPlayerField.setBounds((int)(width * 0.2), (int)(height * 0.67), fieldWidth, fieldHeight);
-        difficultyCombo.setBounds((int)(width * 0.7), (int)(height * 0.50), fieldWidth, fieldHeight);
-        
-        // Position buttons
-        int buttonWidth = 160;
-        int buttonHeight = 40;
-        int buttonsY = (int)(height * 0.69);
-        startButton.setBounds((width / 2 - buttonWidth + 69), buttonsY, buttonWidth, buttonHeight);
-        historyButton.setBounds((width / 2 + 229), buttonsY, buttonWidth, buttonHeight);
-        rulesButton.setBounds(10, 10, 100, 30);
-    }
+		// Create components
+		JTextField first_player_field = new JTextField();
+		JTextField second_player_field = new JTextField();
+		String[] difficulties = { "EASY", "MEDIUM", "HARD" };
+		JComboBox<String> difficulty_combo = new JComboBox<>(difficulties);
 
-    private void handleStartGame() {
-        if (!validateInputs()) {
-            return;
-        }
-        
-        name1 = firstPlayerField.getText();
-        name2 = secondPlayerField.getText();
-        level = Level.valueOf(difficultyCombo.getSelectedItem().toString());
-        
-        mainFrame.dispose();
-        SwingUtilities.invokeLater(() -> {
-            Game game = new Game(level, name1, name2);
-            game.start();
-        });
-    }
+		JButton start_button = new JButton("Start");
+		JButton history_button = new JButton("History & Questions");
 
-    private boolean validateInputs() {
-        if (firstPlayerField.getText().trim().isEmpty()) {
-            showError("Please enter the name of the first player.");
-            return false;
-        }
-        if (secondPlayerField.getText().trim().isEmpty()) {
-            showError("Please enter the name of the second player.");
-            return false;
-        }
-        if (firstPlayerField.getText().equals(secondPlayerField.getText())) {
-            showError("Please enter different names.");
-            return false;
-        }
-        return true;
-    }
+		// Add components to the background panel
+		backgroundPanel.add(first_player_field);
+		backgroundPanel.add(second_player_field);
+		backgroundPanel.add(difficulty_combo);
+		backgroundPanel.add(start_button);
+		backgroundPanel.add(history_button);
 
-    private void showError(String message) {
-        JOptionPane.showMessageDialog(mainFrame, message, "Input Error", JOptionPane.ERROR_MESSAGE);
-    }
+		history_button.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// Action for History & Questions button
+				System.out.println("History & Questions button clicked! Showing history...");
+				main_frame.dispose();
+				// Open HistoryAndQuestionsMenu
+				HistoryAndQuestionsMenu.main(new String[0]);
+			}
+		});
 
-    private void openHistoryMenu() {
-        mainFrame.dispose();
-        SwingUtilities.invokeLater(() -> HistoryAndQuestionsMenu.main(new String[0]));
-    }
+		// Adjust component positions when resized
+		main_frame.addComponentListener(new ComponentAdapter() {
+			@Override
+			public void componentResized(ComponentEvent e) {
+				int width = main_frame.getWidth();
+				int height = main_frame.getHeight();
 
-    private void showRules() {
-        String rules = "Backgammon Rules:\n\n" +
-                "1. The game is played between two players, each with 15 pieces.\n" +
-                "2. The board consists of 24 triangular stations.\n" +
-                "3. Players move in opposite directions.\n" +
-                "4. The goal is to move all pieces to your home quadrant.\n" +
-                "5. Movement is determined by dice rolls.\n" +
-                "6. Difficulty levels affect available dice types and rules.";
-        
-        JOptionPane.showMessageDialog(mainFrame, rules, "Game Rules", JOptionPane.INFORMATION_MESSAGE);
-    }
+				int fieldWidth = (int) (width * 0.1);
+				int fieldHeight = 30;
 
-    private void addListeners() {
-        mainFrame.addComponentListener(new ComponentAdapter() {
-            @Override
-            public void componentResized(ComponentEvent e) {
-                SwingUtilities.invokeLater(() -> {
-                    updateComponentPositions(
-                        (JButton)((JPanel)mainFrame.getContentPane()).getComponent(3),
-                        (JButton)((JPanel)mainFrame.getContentPane()).getComponent(4),
-                        (JButton)((JPanel)mainFrame.getContentPane()).getComponent(5)
-                    );
-                });
-            }
-        });
-    }
+				// Adjusted positions:
+				int leftX = (int) (width * 0.2);
+				int firstPlayerY = (int) (height * 0.5);
+				first_player_field.setBounds(leftX, firstPlayerY, fieldWidth, fieldHeight);
 
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> new GameMenu());
-    }
+				int secondPlayerY = (int) (height * 0.67);
+				second_player_field.setBounds(leftX, secondPlayerY, fieldWidth, fieldHeight);
 
-    // Method to open menu from other classes
-    public static void openMenu() {
-        SwingUtilities.invokeLater(() -> new GameMenu());
-    }
+				int rightX = (int) (width * 0.7);
+				int difficultyY = (int) (height * 0.50);
+				difficulty_combo.setBounds(rightX, difficultyY, fieldWidth, fieldHeight);
+
+				int buttonWidth = 160;
+				int buttonHeight = 40;
+				int buttonsY = (int) (height * 0.69);
+				start_button.setBounds((width / 2 - buttonWidth + 69), buttonsY, buttonWidth, buttonHeight);
+				history_button.setBounds((width / 2 + 229), buttonsY, buttonWidth, buttonHeight);
+			}
+		});
+		// Add ActionListeners to the buttons
+		start_button.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				String firstPlayerName = first_player_field.getText();
+				String secondPlayerName = second_player_field.getText();
+				String selectedDifficulty = (String) difficulty_combo.getSelectedItem();
+				level = Level.valueOf(selectedDifficulty.toUpperCase());
+
+				// Validations
+				if (firstPlayerName.trim().isEmpty()) {
+					JOptionPane.showMessageDialog(main_frame, "Please enter the name of the first player.",
+							"Input Error", JOptionPane.ERROR_MESSAGE);
+					// flag = false;
+					return;
+				}
+				if (secondPlayerName.trim().isEmpty()) {
+					JOptionPane.showMessageDialog(main_frame, "Please enter the name of the second player.",
+							"Input Error", JOptionPane.ERROR_MESSAGE);
+					// flag = false;
+					return;
+				}
+				if (selectedDifficulty == null || selectedDifficulty.isEmpty()) {
+					JOptionPane.showMessageDialog(main_frame, "Please select a difficulty level.", "Input Error",
+							JOptionPane.ERROR_MESSAGE);
+					// flag = false;
+					return;
+				}
+				if (secondPlayerName.equals(firstPlayerName)) {
+					JOptionPane.showMessageDialog(main_frame, "Please enter different names.", "Input Error",
+							JOptionPane.ERROR_MESSAGE);
+					// flag = false;
+					return;
+				}
+				flag = true;
+				name1 = firstPlayerName;
+				name2 = secondPlayerName;
+				main_frame.dispose();
+
+				// If all inputs are valid, start the game
+				System.out.println("Starting game with:");
+				System.out.println("First Player: " + firstPlayerName);
+				System.out.println("Second Player: " + secondPlayerName);
+				System.out.println("Difficulty: " + selectedDifficulty);
+
+			}
+		});
+		// צור כפתור "Rules"
+		JButton rules_button = new JButton("Rules"); // כפתור "Rules"
+		backgroundPanel.add(rules_button); // הוסף אותו ללוח
+		rules_button.setBounds(10, 10, 100, 30); // קבע את המיק
+		// הוסף ActionListener לכפתור "Rules"
+		rules_button.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// הצגת החוקים של המשחק בחלון קופץ
+				String rules = "Backgammon Rules:\n"
+						+ "1. The game is played between two players, each with 15 pieces of a unique color (black or white).\n"
+						+ "2. The board consists of 24 triangular stations, and players move their pieces in opposite directions: black counterclockwise, white clockwise.\n"
+						+ "3. The goal is to move all your pieces to your home quadrant and then off the board before your opponent.\n"
+						+ "4. Players take turns rolling dice and moving their pieces based on the dice results.\n"
+						+ "5. Dice Types:\n" + "   - Standard Dice: Used for regular moves (values 1-6).\n"
+						+ "   - Question Dice: Generates a question (easy, medium, or hard) that players must answer correctly to move.\n"
+						+ "   - Enhanced Dice: Includes values from -3 to 6; negative values move pieces backward.\n"
+						+ "6. Special Stations:\n"
+						+ "   - Question Station: Players answer a random question to proceed.\n"
+						+ "   - Surprise Station: Grants an extra turn or other surprise benefits.\n"
+						+ "7. Gameplay Levels:\n" + "   - Easy: Players use standard dice only.\n"
+						+ "   - Medium: Players use two standard dice and one question die.\n"
+						+ "   - Hard: Players use two enhanced dice and one question die, answering questions correctly to move.\n"
+						+ "8. A piece can be captured if it lands on a spot with a single opponent piece.\n"
+						+ "9. A roll of doubles allows extra moves.\n"
+						+ "10. The game ends when a player removes all their pieces from the board.";
+
+				JOptionPane.showMessageDialog(main_frame, rules, "Game Rules", JOptionPane.INFORMATION_MESSAGE);
+			}
+		});
+
+		main_frame.setVisible(true);
+		while (true) {
+			// בדוק כאן אם קרה משהו
+			if (flag) {
+				System.out.println("Something happened!1");
+				Game game = new Game(level, name1, name2);
+				game.start();
+				System.out.println("Something happened!");
+				break; // או בצע פעולה אחרת
+			}
+
+			try {
+				Thread.sleep(100); // המתן 100ms כדי לא להעמיס על המעבד
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
+		
+
+	}
+	
 }

@@ -104,7 +104,17 @@ public class QuestionsTableScreen {
 			BackButton.setFont(new Font("Arial", Font.BOLD, 12));
 			backgroundPanel.add(BackButton);
 
-			// Add ActionListeners
+			JButton DeleteButton = new JButton("Delete");
+			DeleteButton.setBounds(1050, 600, 100, 40);
+			DeleteButton.setFont(new Font("Arial", Font.BOLD, 12));
+			backgroundPanel.add(DeleteButton);
+
+			JButton InfoButton = new JButton("INFO");
+			InfoButton.setBounds(550, 600, 100, 40);
+			InfoButton.setFont(new Font("Arial", Font.BOLD, 12));
+			backgroundPanel.add(InfoButton);
+	
+			
 			editButton.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
@@ -258,6 +268,58 @@ public class QuestionsTableScreen {
 					sysData.addQuestion(question);
 				}
 			});
+			
+			InfoButton.addActionListener(new ActionListener() {
+			    @Override
+			    public void actionPerformed(ActionEvent e) {
+			        // הצגת מידע על המסך
+			        StringBuilder infoMessage = new StringBuilder();
+			        infoMessage.append("Questions Table Screen:\n");
+			        infoMessage.append("- View and manage questions.\n");
+			        infoMessage.append("- Use 'ADD' to add a new question.\n");
+			        infoMessage.append("- Use 'EDIT' to edit the selected question.\n");
+			        infoMessage.append("- Use 'DELETE' to remove a question.\n");
+			        infoMessage.append("- Difficulty Levels: 1 = Easy, 2 = Medium, 3 = Hard.\n");
+
+			        JOptionPane.showMessageDialog(frame, infoMessage.toString(), "Information", JOptionPane.INFORMATION_MESSAGE);
+			    }
+			});
+
+			
+			DeleteButton.addActionListener(new ActionListener() {
+			    @Override
+			    public void actionPerformed(ActionEvent e) {
+			        // קבלת השורה הנבחרת מהטבלה
+			        int selectedRow = table.getSelectedRow();
+			        if (selectedRow != -1) {
+			            // בקשת אישור מהמשתמש
+			            int confirm = JOptionPane.showConfirmDialog(frame, 
+			                "Are you sure you want to delete this question?", 
+			                "Confirm Delete", 
+			                JOptionPane.YES_NO_OPTION);
+			            if (confirm == JOptionPane.YES_OPTION) {
+			                try {
+			                    // מחיקת השאלה מ-SysData
+			                    sysData.deleteQuestion(selectedRow);
+			                    // מחיקת השורה מהטבלה
+			                    tableModel.removeRow(selectedRow);
+			                    JOptionPane.showMessageDialog(frame, "Question deleted successfully!");
+			                } catch (Exception ex) {
+			                    JOptionPane.showMessageDialog(frame, 
+			                        "An error occurred while deleting the question: " + ex.getMessage(), 
+			                        "Error", 
+			                        JOptionPane.ERROR_MESSAGE);
+			                }
+			            }
+			        } else {
+			            JOptionPane.showMessageDialog(frame, 
+			                "Please select a row to delete.", 
+			                "No Selection", 
+			                JOptionPane.WARNING_MESSAGE);
+			        }
+			    }
+			});
+
 
 			BackButton.addActionListener(e -> {
 				frame.setVisible(false); // Hide the current frame

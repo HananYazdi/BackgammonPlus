@@ -32,6 +32,7 @@ import model.SysData.GameHistory;
 import model.SysData.Question;
 import view.InfoPanel;
 import view.PlayerColor;
+import view.RollResultPopup;
 
 public class Game {
 	protected static Player p1;
@@ -172,23 +173,26 @@ public class Game {
 	}
 
 	public void start() {
-		getPlayers();
-		board.setInitialBoard();
-		startGameTimer();
+	    getPlayers();
+	    board.setInitialBoard();
+	    startGameTimer();
 
-		do {
-			setRolls(new int[] { p1.firstRoll(), p2.firstRoll() });
-		} while (rolls[0] == rolls[1]);
+	    do {
+	        setRolls(new int[] { p1.firstRoll(), p2.firstRoll() });
+	    } while (rolls[0] == rolls[1]);
 
-		if (rolls[0] < rolls[1]) {
-			switchActivePlayer();
-		}
+	    RollResultPopup.showDiceRoll(p1.getName(), p2.getName(), rolls);
 
-		setQuestionRoll(getActivePlayer().RollQuestionTurn());
+	    if (rolls[0] < rolls[1]) {
+	        switchActivePlayer();
+	    }
 
-		info.updateInfo();
-		Turn(p1, p2);
+	    setQuestionRoll(getActivePlayer().RollQuestionTurn());
+	    info.updateInfo();
+	    Turn(p1, p2);
 	}
+
+
 
 //	public void Turn(Player active, Player opponent) {
 //		do {

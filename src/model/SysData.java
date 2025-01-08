@@ -239,6 +239,16 @@ public class SysData {
 		}
 		return filteredQuestions;
 	}
+	// Delete a question by index
+	public void deleteQuestion(int index) {
+	    if (index >= 0 && index < questions.size()) {
+	        questions.remove(index); // Remove the question from the list
+	        saveToFile(); // Save changes to the JSON file
+	    } else {
+	        throw new IndexOutOfBoundsException("Invalid question index");
+	    }
+	}
+
 
 	// Get a random question based on difficulty
 	public Question getRandomQuestion(int difficulty) {

@@ -4,15 +4,17 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
-
+import javax.sound.sampled.*;
 import javax.swing.BorderFactory;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -700,12 +702,14 @@ public class Board extends JPanel {
 	            game.getP2().setScore(game.getP2().getScore() + 1);
 	        }
 	        JOptionPane.showMessageDialog(null, "Correct answer!", "Result", JOptionPane.INFORMATION_MESSAGE);
+	        playSound("/sound/success.wav");
 	    } else {
 	        if (game.getActivePlayer().equals(game.getP1())) {
 	            game.getP1().setScore(game.getP1().getScore() - 1);
 	        } else {
 	            game.getP2().setScore(game.getP2().getScore() - 1);
 	        }
+	        playSound("/sound/fail.wav");
 	        JOptionPane.showMessageDialog(null,
 	                "Incorrect answer! The correct answer was: " + options[correctAnsIndex - 1], "Result",
 	                JOptionPane.ERROR_MESSAGE);
@@ -723,6 +727,24 @@ public class Board extends JPanel {
 		}
 		return null; // Should never happen if the data is correct
 	}
+	
+	
+	public static void playSound(String soundFile) {
+		try {
+	        // Use the classloader to get the file as a resource stream
+	        InputStream audioSrc = Board.class.getResourceAsStream(soundFile);
+	        if (audioSrc == null) {
+	            throw new IllegalArgumentException("Sound file not found: " + soundFile);
+	        }
+	        // Convert the resource to an AudioInputStream
+	        AudioInputStream audioStream = AudioSystem.getAudioInputStream(audioSrc);
+	        Clip clip = AudioSystem.getClip();
+	        clip.open(audioStream);
+	        clip.start();
+	    } catch (UnsupportedAudioFileException | IOException | LineUnavailableException e) {
+	        e.printStackTrace();
+	    }
+    }
 	
 	// **************************************************
 	// GRAPHICS

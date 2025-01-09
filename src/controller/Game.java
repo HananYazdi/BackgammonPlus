@@ -603,6 +603,7 @@ public class Game {
 	        	p2.setScore(p2.getScore() + 1);
 	        }
 	        JOptionPane.showMessageDialog(null, "Correct answer!", "Result", JOptionPane.INFORMATION_MESSAGE);
+	        Board.playSound("/sound/success.wav");
 	    } else {
 	        if (activePlayer.equals(p1)) {
 	        	p1.setScore(p1.getScore() -1);
@@ -612,6 +613,7 @@ public class Game {
 	        JOptionPane.showMessageDialog(null,
 	                "Incorrect answer! The correct answer was: " + options[correctAnsIndex - 1], "Result",
 	                JOptionPane.ERROR_MESSAGE);
+	        Board.playSound("/sound/fail.wav");
 	    }
 	}
 

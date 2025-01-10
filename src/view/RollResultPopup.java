@@ -2,6 +2,7 @@ package view;
 
 import javax.swing.*;
 import java.awt.*;
+import java.net.URL;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -26,7 +27,7 @@ public class RollResultPopup {
         gbc.insets = new Insets(10, 10, 10, 10);
 
         // Add a rolling dice GIF to simulate animation
-        JLabel rollingGif = new JLabel(new ImageIcon("src/images/DiceGif.gif"));
+        JLabel rollingGif = new JLabel(new ImageIcon(RollResultPopup.class.getResource("/images/DiceGif.gif")));
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.gridwidth = 2;
@@ -44,13 +45,13 @@ public class RollResultPopup {
                 panel.remove(rollingGif);
 
                 // Array of dice image paths
-                String[] diceImages = {
-                    "src/images/1.png",
-                    "src/images/2.png",
-                    "src/images/3.png",
-                    "src/images/4.png",
-                    "src/images/5.png",
-                    "src/images/6.png"
+                URL[] diceImages = {
+                	RollResultPopup.class.getResource("/images/1.png"),
+                	RollResultPopup.class.getResource("/images/2.png"),
+                	RollResultPopup.class.getResource("/images/3.png"),
+                	RollResultPopup.class.getResource("/images/4.png"),
+                	RollResultPopup.class.getResource("/images/5.png"),
+                	RollResultPopup.class.getResource("/images/6.png")
                 };
 
                 // Create scaled icons for dice images
@@ -112,7 +113,7 @@ public class RollResultPopup {
     }
 
     // Helper method to scale dice images
-    private static ImageIcon getScaledIcon(String imagePath, int width, int height) {
+    private static ImageIcon getScaledIcon(URL imagePath, int width, int height) {
         ImageIcon originalIcon = new ImageIcon(imagePath);
         Image scaledImage = originalIcon.getImage().getScaledInstance(width, height, Image.SCALE_SMOOTH);
         return new ImageIcon(scaledImage);

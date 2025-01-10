@@ -4,7 +4,9 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.io.BufferedInputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -702,14 +704,14 @@ public class Board extends JPanel {
 	            game.getP2().setScore(game.getP2().getScore() + 1);
 	        }
 	        JOptionPane.showMessageDialog(null, "Correct answer!", "Result", JOptionPane.INFORMATION_MESSAGE);
-	        playSound("/sound/success.wav");
+	        playSound("sound\\success.wav");
 	    } else {
 	        if (game.getActivePlayer().equals(game.getP1())) {
 	            game.getP1().setScore(game.getP1().getScore() - 1);
 	        } else {
 	            game.getP2().setScore(game.getP2().getScore() - 1);
 	        }
-	        playSound("/sound/fail.wav");
+	        playSound("sound\\fail.wav");
 	        JOptionPane.showMessageDialog(null,
 	                "Incorrect answer! The correct answer was: " + options[correctAnsIndex - 1], "Result",
 	                JOptionPane.ERROR_MESSAGE);
@@ -730,20 +732,38 @@ public class Board extends JPanel {
 	
 	
 	public static void playSound(String soundFile) {
-		try {
-	        // Use the classloader to get the file as a resource stream
-	        InputStream audioSrc = Board.class.getResourceAsStream(soundFile);
-	        if (audioSrc == null) {
-	            throw new IllegalArgumentException("Sound file not found: " + soundFile);
-	        }
-	        // Convert the resource to an AudioInputStream
-	        AudioInputStream audioStream = AudioSystem.getAudioInputStream(audioSrc);
-	        Clip clip = AudioSystem.getClip();
-	        clip.open(audioStream);
-	        clip.start();
-	    } catch (UnsupportedAudioFileException | IOException | LineUnavailableException e) {
-	        e.printStackTrace();
-	    }
+        try {
+            // Get the current working directory
+            String baseDir = System.getProperty("user.dir");
+           
+            
+            // Show the full path for debugging (optional)
+            // Check if the file exists before attempting to play
+            File file = new File(baseDir + File.separator + soundFile);
+            if (!file.exists()) {
+                file = new File(baseDir + File.separator + "src\\" + File.separator + soundFile);
+            }
+            if (!file.exists()) {
+                throw new IllegalArgumentException("Sound file not found: " + baseDir);
+            }
+
+            // Wrap FileInputStream in BufferedInputStream
+            try (InputStream audioSrc = new BufferedInputStream(new FileInputStream(file))) {
+                // Convert to AudioInputStream (supports WAV, AIFF, etc.)
+                AudioInputStream audioStream = AudioSystem.getAudioInputStream(audioSrc);
+                Clip clip = AudioSystem.getClip();
+                clip.open(audioStream);
+                clip.start();
+                
+                // Optionally, wait until the clip is finished playing
+                clip.drain();
+            }
+
+        } catch (UnsupportedAudioFileException | IOException | LineUnavailableException e) {
+            // Display error message in case of failure
+            JOptionPane.showMessageDialog(null, "Error playing sound: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
+        }
     }
 	
 	// **************************************************

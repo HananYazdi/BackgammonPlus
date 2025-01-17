@@ -34,6 +34,7 @@ import model.SysData.Question;
 import view.InfoPanel;
 import view.PlayerColor;
 import view.RollResultPopup;
+import view.WinnerPopup;
 
 public class Game {
 	protected static Player p1;
@@ -461,6 +462,7 @@ public class Game {
 	    JLabel winnerLabel = new JLabel("Winner: " + winner);
 	    winnerLabel.setFont(new Font("Arial", Font.PLAIN, 40));
 	    winnerLabel.setHorizontalAlignment(JLabel.CENTER);
+	    WinnerPopup.showWinnerPopup(winner);
 
 	    // הסתרת הלוח והוספת תווית המנצח למסך
 	    board.setVisible(false);

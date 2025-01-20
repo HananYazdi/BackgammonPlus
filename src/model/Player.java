@@ -11,6 +11,7 @@ public class Player {
 	private String name;
 	private int score;
 	private Game game;
+	private DiceStatisticsObserver stats = new DiceStatisticsObserver();
 
 	public Player(PlayerColor c, String name, Game game) {
 		playerColor = c;
@@ -32,12 +33,12 @@ public class Player {
 	}
 
 	public int firstRoll() {
+
 		DiceFactory DiceFactory = new DiceFactory();
 		DiceInterface regularDice = DiceFactory.createDice("Dice");
 		ObservableDice observableDice = new ObservableDice(regularDice);
-		DiceStatisticsObserver stats = new DiceStatisticsObserver();
 		observableDice.addObserver(stats);
-		//Dice regularDice = new Dice();
+		System.out.println("1");
 		return observableDice.roll();
 	}
 
@@ -45,35 +46,26 @@ public class Player {
 		int dice[] = new int[2];
 		DiceInterface regularDice = DiceFactory.createDice("Dice");
 		ObservableDice observableDice = new ObservableDice(regularDice);
-		DiceStatisticsObserver stats = new DiceStatisticsObserver();
 		observableDice.addObserver(stats);
-		//Dice regularDice = new Dice();
 		dice[0] = observableDice.roll();
 		dice[1] = observableDice.roll();
 		// SelectMove(dice1,dice2);
+		System.out.println("2");
 		return dice;
 	}
 
 	public int RollQuestionTurn() {
 		DiceInterface QuestionDice = DiceFactory.createDice("QuestionDice");
-		ObservableDice observableDice = new ObservableDice(QuestionDice);
-		DiceStatisticsObserver stats = new DiceStatisticsObserver();
-
-		observableDice.addObserver(stats);
-		//QuestionDice QuestionDice = new QuestionDice();
-		return observableDice.roll();
+		return QuestionDice.roll();
 	}
 
 	public int[] RollEnhancedDiceTurn() {
 
 		int dice[] = new int[2];
-		
+
 		DiceInterface EnhancedDice = DiceFactory.createDice("EnhancedDice");
 		ObservableDice observableDice = new ObservableDice(EnhancedDice);
-		DiceStatisticsObserver stats = new DiceStatisticsObserver();
-
 		observableDice.addObserver(stats);
-		//EnhancedDice EnhancedDice = new EnhancedDice();
 		dice[0] = observableDice.roll();
 		dice[1] = observableDice.roll();
 		return dice;

@@ -1,23 +1,18 @@
 package controller;
 
 import java.awt.BorderLayout;
-import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.FileReader;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
-import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -175,26 +170,42 @@ public class Game {
 	}
 
 	public void start() {
-	    getPlayers();
-	    board.setInitialBoard();
-	    startGameTimer();
+		getPlayers();
+		board.setInitialBoard();
+		startGameTimer();
 
-	    do {
-	        setRolls(new int[] { p1.firstRoll(), p2.firstRoll() });
-	    } while (rolls[0] == rolls[1]);
+		do {
+			setRolls(new int[] { p1.firstRoll(), p1.firstRoll() });
+		} while (rolls[0] == rolls[1]);
+		frame.setVisible(false);
+		RollResultPopup.showDiceRoll(p1.getName(), p2.getName(), rolls);
+		// לולאה שבודקת אם הכפתור נלחץ
+		new Thread(() -> {
+			while (true) {
+				if (RollResultPopup.isClicked()) {
+					System.out.println("Button was clicked! Continuing execution...");
+					frame.setVisible(true);
+					if (rolls[0] < rolls[1]) {
+						switchActivePlayer();
+					}
 
-	    RollResultPopup.showDiceRoll(p1.getName(), p2.getName(), rolls);
+					setQuestionRoll(getActivePlayer().RollQuestionTurn());
+					info.updateInfo();
+					Turn(p1, p2);
+					break; // יציאה מהלולאה
+				}
+				try {
+					Thread.sleep(100); // השהייה קצרה כדי למנוע ניצול יתר של המעבד
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			}
+			// המשך הפעולה אחרי הלחיצה על הכפתור
+			System.out.println("Performing post-click actions...");
+			// קוד נוסף
+		}).start();
 
-	    if (rolls[0] < rolls[1]) {
-	        switchActivePlayer();
-	    }
-
-	    setQuestionRoll(getActivePlayer().RollQuestionTurn());
-	    info.updateInfo();
-	    Turn(p1, p2);
 	}
-
-
 
 //	public void Turn(Player active, Player opponent) {
 //		do {
@@ -255,7 +266,7 @@ public class Game {
 	}
 
 	private void playMediumTurn(Player active, Player opponent) {
-		//SysData sysData = new SysData();
+		// SysData sysData = new SysData();
 		do {
 			boolean flag = false;
 			if (rolls.length == 0) {
@@ -443,44 +454,28 @@ public class Game {
 		seconds = seconds % 60; // חישוב השניות שנותרו
 		return String.format("%02d:%02d", minutes, seconds); // פורמט של MM:SS
 	}
-	
 
 	public void end() {
 		if (gameTimer != null) {
 			gameTimer.stop(); // Stop the timer when the game ends
 		}
 		System.out.println("Game ended. Total time: " + elapsedTime + " seconds");
-	//	JButton replay = new JButton("Replay?");
-	//	replay.setFont(new Font("Arial", Font.PLAIN, 40));
-	//	board.setVisible(false);
-	//	frame.add(replay, BorderLayout.CENTER);
-		//frame.repaint();
-		String winner = getWinner(p1, p2);
-		
-		
-	    // יצירת תווית שתציג את המנצח
-	    JLabel winnerLabel = new JLabel("Winner: " + winner);
-	    winnerLabel.setFont(new Font("Arial", Font.PLAIN, 40));
-	    winnerLabel.setHorizontalAlignment(JLabel.CENTER);
-	    WinnerPopup.showWinnerPopup(winner);
 
-	    // הסתרת הלוח והוספת תווית המנצח למסך
-	    board.setVisible(false);
-	    frame.add(winnerLabel, BorderLayout.CENTER);
-	    frame.repaint();
-	    
+		String winner = getWinner(p1, p2);
+
+		WinnerPopup.showWinnerPopup(winner);
+
+		// הסתרת הלוח והוספת תווית המנצח למסך
+		board.setVisible(false);
+		board.repaint();
+		frame.setVisible(false);
+		frame.repaint();
+
 		GameHistory history = new GameHistory(p1.getName(), p2.getName(), winner, difficulty,
 				secondsToTimeFormat(elapsedTime), p1.getScore(), p2.getScore());
 		SysData sysData = new SysData();
 		sysData.addGameHistory(history);
 
-	//	replay.addActionListener(new ActionListener() {
-	//		@Override
-	//		public void actionPerformed(ActionEvent e) {
-	//			setupFrame();
-	//			start();
-	//		}
-	//	});
 	}
 
 	public String getWinner(Player firstPlayer, Player secondPlayer) {
@@ -498,7 +493,7 @@ public class Game {
 		return "No winner yet";
 	}
 
-	public void switchActivePlayer() {
+	public static void switchActivePlayer() {
 		// מחליף את השחקן הפעיל
 		activePlayer = (activePlayer == p1) ? p2 : p1;
 	}
@@ -561,64 +556,62 @@ public class Game {
 	}
 
 	private static void displayPopup(List<Question> listOfQuestions, List<String> filteredQuestions) {
-	    Random random = new Random();
-	    int randomIndex = random.nextInt(filteredQuestions.size());  // Choose a random question from filtered list
-	    String questionText = filteredQuestions.get(randomIndex);
+		Random random = new Random();
+		int randomIndex = random.nextInt(filteredQuestions.size()); // Choose a random question from filtered list
+		String questionText = filteredQuestions.get(randomIndex);
 
-	    // Find the Question object that matches the selected question text
-	    Question selectedQuestion = null;
-	    for (Question q : listOfQuestions) {
-	        if (q.getQuestion().equals(questionText)) {
-	            selectedQuestion = q;
-	            break;
-	        }
-	    }
+		// Find the Question object that matches the selected question text
+		Question selectedQuestion = null;
+		for (Question q : listOfQuestions) {
+			if (q.getQuestion().equals(questionText)) {
+				selectedQuestion = q;
+				break;
+			}
+		}
 
-	    if (selectedQuestion == null) {
-	        System.out.println("Selected question not found!");
-	        return;
-	    }
+		if (selectedQuestion == null) {
+			System.out.println("Selected question not found!");
+			return;
+		}
 
-	    // Extract answers and the correct answer index from the selected question
-	    List<String> answers = selectedQuestion.getAnswers();
-	    int correctAnsIndex = selectedQuestion.getCorrectAns(); // Assuming it's a 1-based index
+		// Extract answers and the correct answer index from the selected question
+		List<String> answers = selectedQuestion.getAnswers();
+		int correctAnsIndex = selectedQuestion.getCorrectAns(); // Assuming it's a 1-based index
 
-	    StringBuilder message = new StringBuilder("Question: " + questionText + "\n\n");
+		StringBuilder message = new StringBuilder("Question: " + questionText + "\n\n");
 
-	    // Prepare the answer options for the user
-	    String[] options = new String[answers.size()];
-	    for (int i = 0; i < answers.size(); i++) {
-	        options[i] = String.valueOf(i + 1);
-	        message.append((i + 1) + ". " + answers.get(i) + "\n");
-	    }
+		// Prepare the answer options for the user
+		String[] options = new String[answers.size()];
+		for (int i = 0; i < answers.size(); i++) {
+			options[i] = String.valueOf(i + 1);
+			message.append((i + 1) + ". " + answers.get(i) + "\n");
+		}
 
-	    // Show the question in a popup with options
-	    int userChoice = JOptionPane.showOptionDialog(null, message.toString(),
-	            "Filtered Questions", JOptionPane.DEFAULT_OPTION,
-	            JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
+		// Show the question in a popup with options
+		int userChoice = JOptionPane.showOptionDialog(null, message.toString(), "Filtered Questions",
+				JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
 
-	    // Check if the user selected the correct answer
-	    if (userChoice == correctAnsIndex - 1) {
-	        if (activePlayer.equals(p1)) {
-	        	p1.setScore(p1.getScore() + 1);
-	        } else {
-	        	p2.setScore(p2.getScore() + 1);
-	        }
-	        JOptionPane.showMessageDialog(null, "Correct answer!", "Result", JOptionPane.INFORMATION_MESSAGE);
-	        Board.playSound("sound\\success.wav");
-	    } else {
-	        if (activePlayer.equals(p1)) {
-	        	p1.setScore(p1.getScore() -1);
-	        } else {
-	        	p2.setScore(p2.getScore() - 1);
-	        }
-	        JOptionPane.showMessageDialog(null,
-	                "Incorrect answer! The correct answer was: " + options[correctAnsIndex - 1], "Result",
-	                JOptionPane.ERROR_MESSAGE);
-	        Board.playSound("sound\\fail.wav");
-	    }
+		// Check if the user selected the correct answer
+		if (userChoice == correctAnsIndex - 1) {
+			if (activePlayer.equals(p1)) {
+				p1.setScore(p1.getScore() + 1);
+			} else {
+				p2.setScore(p2.getScore() + 1);
+			}
+			JOptionPane.showMessageDialog(null, "Correct answer!", "Result", JOptionPane.INFORMATION_MESSAGE);
+			Board.playSound("sound\\success.wav");
+		} else {
+			if (activePlayer.equals(p1)) {
+				p1.setScore(p1.getScore() - 1);
+			} else {
+				p2.setScore(p2.getScore() - 1);
+			}
+			JOptionPane.showMessageDialog(null, "Incorrect answer! You lost your turn. ", "Result",
+					JOptionPane.ERROR_MESSAGE);
+			Board.playSound("sound\\fail.wav");
+			switchActivePlayer();
+		}
 	}
-
 
 	// Method to find the question object in the JSON by the question text
 	private static JsonObject findQuestionObject(JsonArray questionsArray, String questionText) {
@@ -631,47 +624,51 @@ public class Game {
 		}
 		return null; // Should never happen if the data is correct
 	}
-	//function for the processQuestionTurn
+
+	// function for the processQuestionTurn
 	public void processQuestionTurn() {
 		SysData sysData = new SysData();
-	    try {
-	        // Roll the question turn to get the difficulty level
-	        int difficulty = p1.RollQuestionTurn();
-	        
-	        // Set the question roll (this might involve some side-effect like UI or game state update)
-	        setQuestionRoll(difficulty);
-	        
-	        // Retrieve the list of questions filtered by the selected difficulty
-	        List<Question> listOfQuestions = sysData.getQuestionsByDifficulty(difficulty);
+		try {
+			// Roll the question turn to get the difficulty level
+			int difficulty = p1.RollQuestionTurn();
 
-	        // If no questions were found, throw an exception (optional, for robust error handling)
-	        if (listOfQuestions == null || listOfQuestions.isEmpty()) {
-	            throw new Exception("No questions available for this difficulty.");
-	        }
-	        
-	        // Create a list of the filtered question texts
-	        List<String> filteredQuestions = new ArrayList<>();
-	        for (Question q : listOfQuestions) {
-	            if (q.getQuestion() == null) {
-	                throw new Exception("Question text is missing for one or more questions.");
-	            }
-	            filteredQuestions.add(q.getQuestion()); // Assuming getQuestion() is available
-	        }
+			// Set the question roll (this might involve some side-effect like UI or game
+			// state update)
+			setQuestionRoll(difficulty);
 
-	        // Display the popup for the questions
-	        displayPopup(listOfQuestions, filteredQuestions);
+			// Retrieve the list of questions filtered by the selected difficulty
+			List<Question> listOfQuestions = sysData.getQuestionsByDifficulty(difficulty);
 
-	    } catch (NullPointerException e) {
-	        // Handle specific NullPointerExceptions (e.g., null data in sysData or Question objects)
-	        JOptionPane.showMessageDialog(null, "Error: A required value was missing. Please check the data.", 
-	                                      "Error", JOptionPane.ERROR_MESSAGE);
-	        e.printStackTrace();
-	    } catch (Exception e) {
-	        // Catch all other exceptions and provide a generic error message
-	        JOptionPane.showMessageDialog(null, "An unexpected error occurred: " + e.getMessage(), 
-	                                      "Error", JOptionPane.ERROR_MESSAGE);
-	        e.printStackTrace();
-	    }
+			// If no questions were found, throw an exception (optional, for robust error
+			// handling)
+			if (listOfQuestions == null || listOfQuestions.isEmpty()) {
+				throw new Exception("No questions available for this difficulty.");
+			}
+
+			// Create a list of the filtered question texts
+			List<String> filteredQuestions = new ArrayList<>();
+			for (Question q : listOfQuestions) {
+				if (q.getQuestion() == null) {
+					throw new Exception("Question text is missing for one or more questions.");
+				}
+				filteredQuestions.add(q.getQuestion()); // Assuming getQuestion() is available
+			}
+
+			// Display the popup for the questions
+			displayPopup(listOfQuestions, filteredQuestions);
+
+		} catch (NullPointerException e) {
+			// Handle specific NullPointerExceptions (e.g., null data in sysData or Question
+			// objects)
+			JOptionPane.showMessageDialog(null, "Error: A required value was missing. Please check the data.", "Error",
+					JOptionPane.ERROR_MESSAGE);
+			e.printStackTrace();
+		} catch (Exception e) {
+			// Catch all other exceptions and provide a generic error message
+			JOptionPane.showMessageDialog(null, "An unexpected error occurred: " + e.getMessage(), "Error",
+					JOptionPane.ERROR_MESSAGE);
+			e.printStackTrace();
+		}
 	}
 
 }

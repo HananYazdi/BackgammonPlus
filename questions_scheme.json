@@ -113,5 +113,37 @@
     "gameTime" : "06:37",
     "player1Score" : -1,
     "player2Score" : -2
+  }, {
+    "player1Name" : "or",
+    "player2Name" : "tom ",
+    "winner" : "or",
+    "difficultyLevel" : "EASY",
+    "gameTime" : "05:45",
+    "player1Score" : -1,
+    "player2Score" : -2
+  }, {
+    "player1Name" : "roni",
+    "player2Name" : "yoni",
+    "winner" : "roni",
+    "difficultyLevel" : "EASY",
+    "gameTime" : "04:13",
+    "player1Score" : -8,
+    "player2Score" : -2
+  }, {
+    "player1Name" : "roni",
+    "player2Name" : "yair",
+    "winner" : "roni",
+    "difficultyLevel" : "EASY",
+    "gameTime" : "04:24",
+    "player1Score" : -1,
+    "player2Score" : -2
+  }, {
+    "player1Name" : "ido",
+    "player2Name" : "yuval",
+    "winner" : "ido",
+    "difficultyLevel" : "EASY",
+    "gameTime" : "03:40",
+    "player1Score" : -4,
+    "player2Score" : -4
   } ]
 }

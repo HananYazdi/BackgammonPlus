@@ -2,199 +2,205 @@ package controller;
 
 import java.awt.Graphics;
 import java.awt.Image;
-import javax.swing.*;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
+
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
+
 import model.Level;
 import view.HistoryAndQuestionsMenu;
 
 public class GameMenu {
-    private JFrame mainFrame;
-    private JTextField firstPlayerField;
-    private JTextField secondPlayerField;
-    private JComboBox<String> difficultyCombo;
-    
-    // משתנים סטטיים שהיו בקוד המקורי
-    public static boolean flag = false;
-    public static Level level;
-    public static String name1;
-    public static String name2;
-    
-    public GameMenu() {
-        initializeFrame();
-        initializeComponents();
-        setupLayout();
-        addListeners();
-        mainFrame.setVisible(true);
-        
-        // הוספת הלולאה המקורית
-        startGameLoop();
-    }
+	private JFrame mainFrame;
+	private JTextField firstPlayerField;
+	private JTextField secondPlayerField;
+	private JComboBox<String> difficultyCombo;
 
-    private void initializeFrame() {
-        mainFrame = new JFrame("Backgammon Menu");
-        mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        mainFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
-        
-        ImageIcon bgIcon = new ImageIcon(getClass().getResource("/images/backgammon_image.png"));
-        Image backgroundImg = bgIcon.getImage();
-        
-        JPanel backgroundPanel = new JPanel(null) {
-            @Override
-            protected void paintComponent(Graphics g) {
-                super.paintComponent(g);
-                g.drawImage(backgroundImg, 0, 0, getWidth(), getHeight(), this);
-            }
-        };
-        
-        mainFrame.setContentPane(backgroundPanel);
-    }
+	// משתנים סטטיים שהיו בקוד המקורי
+	public static boolean flag = false;
+	public static Level level;
+	public static String name1;
+	public static String name2;
 
-    private void initializeComponents() {
-        firstPlayerField = new JTextField();
-        secondPlayerField = new JTextField();
-        difficultyCombo = new JComboBox<>(new String[]{"EASY", "MEDIUM", "HARD"});
-    }
+	public GameMenu() {
+		initializeFrame();
+		initializeComponents();
+		setupLayout();
+		addListeners();
+		mainFrame.setVisible(true);
 
-    private void setupLayout() {
-        JPanel contentPanel = (JPanel) mainFrame.getContentPane();
-        
-        contentPanel.add(firstPlayerField);
-        contentPanel.add(secondPlayerField);
-        contentPanel.add(difficultyCombo);
-        
-        JButton startButton = createButton("Start", e -> handleStartGame());
-        JButton historyButton = createButton("History & Questions", e -> openHistoryMenu());
-        JButton rulesButton = createButton("Rules", e -> showRules());
-        
-        contentPanel.add(startButton);
-        contentPanel.add(historyButton);
-        contentPanel.add(rulesButton);
-        
-        mainFrame.addComponentListener(new ComponentAdapter() {
-            @Override
-            public void componentResized(ComponentEvent e) {
-                updateComponentPositions(startButton, historyButton, rulesButton);
-            }
-        });
-    }
+		// הוספת הלולאה המקורית
+		startGameLoop();
+	}
 
-    private JButton createButton(String text, java.awt.event.ActionListener listener) {
-        JButton button = new JButton(text);
-        button.addActionListener(listener);
-        return button;
-    }
+	private void initializeFrame() {
+		mainFrame = new JFrame("Backgammon Menu");
+		mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		mainFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
 
-    private void updateComponentPositions(JButton startButton, JButton historyButton, JButton rulesButton) {
-        int width = mainFrame.getWidth();
-        int height = mainFrame.getHeight();
-        
-        int fieldWidth = (int)(width * 0.1);
-        int fieldHeight = 30;
-        
-        firstPlayerField.setBounds((int)(width * 0.2), (int)(height * 0.5), fieldWidth, fieldHeight);
-        secondPlayerField.setBounds((int)(width * 0.2), (int)(height * 0.67), fieldWidth, fieldHeight);
-        difficultyCombo.setBounds((int)(width * 0.7), (int)(height * 0.50), fieldWidth, fieldHeight);
-        
-        int buttonWidth = 160;
-        int buttonHeight = 40;
-        int buttonsY = (int)(height * 0.69);
-        startButton.setBounds((width / 2 - buttonWidth + 69), buttonsY, buttonWidth, buttonHeight);
-        historyButton.setBounds((width / 2 + 229), buttonsY, buttonWidth, buttonHeight);
-        rulesButton.setBounds(10, 10, 100, 30);
-    }
+		ImageIcon bgIcon = new ImageIcon(getClass().getResource("/images/backgammon_image.png"));
+		Image backgroundImg = bgIcon.getImage();
 
-    private void handleStartGame() {
-        if (!validateInputs()) {
-            return;
-        }
-        
-        // עדכון המשתנים הסטטיים
-        name1 = firstPlayerField.getText();
-        name2 = secondPlayerField.getText();
-        level = Level.valueOf(difficultyCombo.getSelectedItem().toString());
-        flag = true;  // סימון שהמשחק יכול להתחיל
-        
-        mainFrame.dispose();
-    }
+		JPanel backgroundPanel = new JPanel(null) {
+			@Override
+			protected void paintComponent(Graphics g) {
+				super.paintComponent(g);
+				g.drawImage(backgroundImg, 0, 0, getWidth(), getHeight(), this);
+			}
+		};
 
-    private void startGameLoop() {
-        // הפעלת הלולאה בthread נפרד
-        new Thread(() -> {
-            while (true) {
-                if (flag) {
-                    System.out.println("Starting game!");
-                    Game game = new Game(level, name1, name2);
-                    game.start();
-                    break;
-                }
-                
-                try {
-                    Thread.sleep(100);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        }).start();
-    }
+		mainFrame.setContentPane(backgroundPanel);
+	}
 
-    private boolean validateInputs() {
-        if (firstPlayerField.getText().trim().isEmpty()) {
-            showError("Please enter the name of the first player.");
-            return false;
-        }
-        if (secondPlayerField.getText().trim().isEmpty()) {
-            showError("Please enter the name of the second player.");
-            return false;
-        }
-        if (firstPlayerField.getText().equals(secondPlayerField.getText())) {
-            showError("Please enter different names.");
-            return false;
-        }
-        return true;
-    }
+	private void initializeComponents() {
+		firstPlayerField = new JTextField();
+		secondPlayerField = new JTextField();
+		difficultyCombo = new JComboBox<>(new String[] { "EASY", "MEDIUM", "HARD" });
+	}
 
-    private void showError(String message) {
-        JOptionPane.showMessageDialog(mainFrame, message, "Input Error", JOptionPane.ERROR_MESSAGE);
-    }
+	private void setupLayout() {
+		JPanel contentPanel = (JPanel) mainFrame.getContentPane();
 
-    private void openHistoryMenu() {
-        mainFrame.dispose();
-        HistoryAndQuestionsMenu.main(new String[0]);
-    }
+		contentPanel.add(firstPlayerField);
+		contentPanel.add(secondPlayerField);
+		contentPanel.add(difficultyCombo);
 
-    private void showRules() {
-        String rules = "Backgammon Rules:\n\n" +
-                "1. The game is played between two players, each with 15 pieces.\n" +
-                "2. The board consists of 24 triangular stations.\n" +
-                "3. Players move in opposite directions.\n" +
-                "4. The goal is to move all pieces to your home quadrant.\n" +
-                "5. Movement is determined by dice rolls.\n" +
-                "6. Difficulty levels affect available dice types and rules.";
-        
-        JOptionPane.showMessageDialog(mainFrame, rules, "Game Rules", JOptionPane.INFORMATION_MESSAGE);
-    }
+		JButton startButton = createButton("Start", e -> handleStartGame());
+		JButton historyButton = createButton("History & Questions", e -> openHistoryMenu());
+		JButton rulesButton = createButton("Rules", e -> showRules());
 
-    private void addListeners() {
-        mainFrame.addComponentListener(new ComponentAdapter() {
-            @Override
-            public void componentResized(ComponentEvent e) {
-                SwingUtilities.invokeLater(() -> {
-                    updateComponentPositions(
-                        (JButton)((JPanel)mainFrame.getContentPane()).getComponent(3),
-                        (JButton)((JPanel)mainFrame.getContentPane()).getComponent(4),
-                        (JButton)((JPanel)mainFrame.getContentPane()).getComponent(5)
-                    );
-                });
-            }
-        });
-    }
+		contentPanel.add(startButton);
+		contentPanel.add(historyButton);
+		contentPanel.add(rulesButton);
 
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> new GameMenu());
-    }
+		mainFrame.addComponentListener(new ComponentAdapter() {
+			@Override
+			public void componentResized(ComponentEvent e) {
+				updateComponentPositions(startButton, historyButton, rulesButton);
+			}
+		});
+	}
 
-    public static void openMenu() {
-        SwingUtilities.invokeLater(() -> new GameMenu());
-    }
+	private JButton createButton(String text, java.awt.event.ActionListener listener) {
+		JButton button = new JButton(text);
+		button.addActionListener(listener);
+		return button;
+	}
+
+	private void updateComponentPositions(JButton startButton, JButton historyButton, JButton rulesButton) {
+		int width = mainFrame.getWidth();
+		int height = mainFrame.getHeight();
+
+		int fieldWidth = (int) (width * 0.1);
+		int fieldHeight = 30;
+
+		firstPlayerField.setBounds((int) (width * 0.2), (int) (height * 0.5), fieldWidth, fieldHeight);
+		secondPlayerField.setBounds((int) (width * 0.2), (int) (height * 0.67), fieldWidth, fieldHeight);
+		difficultyCombo.setBounds((int) (width * 0.7), (int) (height * 0.50), fieldWidth, fieldHeight);
+
+		int buttonWidth = 160;
+		int buttonHeight = 40;
+		int buttonsY = (int) (height * 0.69);
+		startButton.setBounds((width / 2 - buttonWidth + 69), buttonsY, buttonWidth, buttonHeight);
+		historyButton.setBounds((width / 2 + 229), buttonsY, buttonWidth, buttonHeight);
+		rulesButton.setBounds(10, 10, 100, 30);
+	}
+
+	private void handleStartGame() {
+		if (!validateInputs()) {
+			return;
+		}
+
+		// עדכון המשתנים הסטטיים
+		name1 = firstPlayerField.getText();
+		name2 = secondPlayerField.getText();
+		level = Level.valueOf(difficultyCombo.getSelectedItem().toString());
+		flag = true; // סימון שהמשחק יכול להתחיל
+
+		mainFrame.dispose();
+	}
+
+	private void startGameLoop() {
+		// הפעלת הלולאה בthread נפרד
+		new Thread(() -> {
+			while (true) {
+				if (flag) {
+					System.out.println("Starting game!");
+					Game game = new Game(level, name1, name2);
+
+					game.start();
+					break;
+				}
+
+				try {
+					Thread.sleep(100);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			}
+		}).start();
+	}
+
+	private boolean validateInputs() {
+		if (firstPlayerField.getText().trim().isEmpty()) {
+			showError("Please enter the name of the first player.");
+			return false;
+		}
+		if (secondPlayerField.getText().trim().isEmpty()) {
+			showError("Please enter the name of the second player.");
+			return false;
+		}
+		if (firstPlayerField.getText().equals(secondPlayerField.getText())) {
+			showError("Please enter different names.");
+			return false;
+		}
+		return true;
+	}
+
+	private void showError(String message) {
+		JOptionPane.showMessageDialog(mainFrame, message, "Input Error", JOptionPane.ERROR_MESSAGE);
+	}
+
+	private void openHistoryMenu() {
+		mainFrame.dispose();
+		HistoryAndQuestionsMenu.main(new String[0]);
+	}
+
+	private void showRules() {
+		String rules = "Backgammon Rules:\n\n" + "1. The game is played between two players, each with 15 pieces.\n"
+				+ "2. The board consists of 24 triangular stations.\n" + "3. Players move in opposite directions.\n"
+				+ "4. The goal is to move all pieces to your home quadrant.\n"
+				+ "5. Movement is determined by dice rolls.\n"
+				+ "6. Difficulty levels affect available dice types and rules.";
+
+		JOptionPane.showMessageDialog(mainFrame, rules, "Game Rules", JOptionPane.INFORMATION_MESSAGE);
+	}
+
+	private void addListeners() {
+		mainFrame.addComponentListener(new ComponentAdapter() {
+			@Override
+			public void componentResized(ComponentEvent e) {
+				SwingUtilities.invokeLater(() -> {
+					updateComponentPositions((JButton) ((JPanel) mainFrame.getContentPane()).getComponent(3),
+							(JButton) ((JPanel) mainFrame.getContentPane()).getComponent(4),
+							(JButton) ((JPanel) mainFrame.getContentPane()).getComponent(5));
+				});
+			}
+		});
+	}
+
+	public static void main(String[] args) {
+		SwingUtilities.invokeLater(() -> new GameMenu());
+	}
+
+	public static void openMenu() {
+		SwingUtilities.invokeLater(() -> new GameMenu());
+	}
 }

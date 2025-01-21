@@ -126,7 +126,7 @@ public class GameMenu {
 		name2 = secondPlayerField.getText();
 		level = Level.valueOf(difficultyCombo.getSelectedItem().toString());
 		flag = true; // סימון שהמשחק יכול להתחיל
-		Game.BoardColor = Integer.valueOf(StyleCombo.getSelectedItem().toString());
+		Game.BoardColor = Integer.valueOf(StyleCombo.getSelectedIndex());
 		mainFrame.dispose();
 	}
 

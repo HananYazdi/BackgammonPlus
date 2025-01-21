@@ -64,7 +64,7 @@ public class GameMenu {
 		firstPlayerField = new JTextField();
 		secondPlayerField = new JTextField();
 		difficultyCombo = new JComboBox<>(new String[] { "EASY", "MEDIUM", "HARD" });
-		StyleCombo = new JComboBox<>(new String[] { "0", "1", "2", "3", "4" });
+		StyleCombo = new JComboBox<>(new String[] { "White", "Pink", "Off-White", "Orange", "Blue" });
 	}
 
 	private void setupLayout() {

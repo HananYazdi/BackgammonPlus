@@ -1,6 +1,8 @@
 package view;
 import java.awt.*;
 
+import controller.Game;
+
 public class Palette
 {
     private static final Color DEFAULT_BLACK_PIECE_COLOUR = new Color(0, 0, 0);
@@ -10,6 +12,15 @@ public class Palette
     private static final Color DEFAULT_LIGHT_TRIANGLE_COLOUR = new Color(204, 184, 163);
     private static final Color DEFAULT_BAR_COLOUR = new Color(230, 218, 207);
     private static final Color DEFAULT_BOARD_BACKGROUND_COLOUR = new Color(230, 230, 242);
+    private static final Color DEFAULT_BOARD_BACKGROUND_COLOUR2 = new Color(255, 182, 193);  // Soft Pink
+    private static final Color DEFAULT_BOARD_BACKGROUND_COLOUR3 = new Color(230, 230, 250);  // Lavender
+    private static final Color DEFAULT_BOARD_BACKGROUND_COLOUR4 = new Color(255, 127, 80);  // Coral
+    private static final Color DEFAULT_BOARD_BACKGROUND_COLOUR5 = new Color(65, 105, 225); // royal blue
+
+
+
+
+
 
     public static Color getPieceColor(final PlayerColor c) {
         if (c == PlayerColor.BLACK)
@@ -38,6 +49,14 @@ public class Palette
     }
     
     public static Color getBoardBackgroundColour() {
+    	if(Game.BoardColor == 1)
+    		return DEFAULT_BOARD_BACKGROUND_COLOUR2;
+    	else if(Game.BoardColor == 2)
+    		return DEFAULT_BOARD_BACKGROUND_COLOUR3;
+    	else if(Game.BoardColor == 3)
+    		return DEFAULT_BOARD_BACKGROUND_COLOUR4;
+    	else if(Game.BoardColor == 4)
+    		return DEFAULT_BOARD_BACKGROUND_COLOUR5;
         return DEFAULT_BOARD_BACKGROUND_COLOUR;
     }
 

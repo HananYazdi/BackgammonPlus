@@ -22,6 +22,7 @@ public class GameMenu {
 	private JTextField firstPlayerField;
 	private JTextField secondPlayerField;
 	private JComboBox<String> difficultyCombo;
+	private JComboBox<String> StyleCombo;
 
 	// משתנים סטטיים שהיו בקוד המקורי
 	public static boolean flag = false;
@@ -63,6 +64,7 @@ public class GameMenu {
 		firstPlayerField = new JTextField();
 		secondPlayerField = new JTextField();
 		difficultyCombo = new JComboBox<>(new String[] { "EASY", "MEDIUM", "HARD" });
+		StyleCombo = new JComboBox<>(new String[] { "0", "1", "2", "3", "4" });
 	}
 
 	private void setupLayout() {
@@ -71,6 +73,7 @@ public class GameMenu {
 		contentPanel.add(firstPlayerField);
 		contentPanel.add(secondPlayerField);
 		contentPanel.add(difficultyCombo);
+		contentPanel.add(StyleCombo);
 
 		JButton startButton = createButton("Start", e -> handleStartGame());
 		JButton historyButton = createButton("History & Questions", e -> openHistoryMenu());
@@ -104,7 +107,7 @@ public class GameMenu {
 		firstPlayerField.setBounds((int) (width * 0.2), (int) (height * 0.5), fieldWidth, fieldHeight);
 		secondPlayerField.setBounds((int) (width * 0.2), (int) (height * 0.67), fieldWidth, fieldHeight);
 		difficultyCombo.setBounds((int) (width * 0.7), (int) (height * 0.50), fieldWidth, fieldHeight);
-
+		StyleCombo.setBounds((int) (width * 0.85), (int) (height * 0.50), fieldWidth, fieldHeight);
 		int buttonWidth = 160;
 		int buttonHeight = 40;
 		int buttonsY = (int) (height * 0.69);
@@ -123,7 +126,7 @@ public class GameMenu {
 		name2 = secondPlayerField.getText();
 		level = Level.valueOf(difficultyCombo.getSelectedItem().toString());
 		flag = true; // סימון שהמשחק יכול להתחיל
-
+		Game.BoardColor = Integer.valueOf(StyleCombo.getSelectedItem().toString());
 		mainFrame.dispose();
 	}
 
@@ -188,9 +191,9 @@ public class GameMenu {
 			@Override
 			public void componentResized(ComponentEvent e) {
 				SwingUtilities.invokeLater(() -> {
-					updateComponentPositions((JButton) ((JPanel) mainFrame.getContentPane()).getComponent(3),
-							(JButton) ((JPanel) mainFrame.getContentPane()).getComponent(4),
-							(JButton) ((JPanel) mainFrame.getContentPane()).getComponent(5));
+					updateComponentPositions((JButton) ((JPanel) mainFrame.getContentPane()).getComponent(4),
+							(JButton) ((JPanel) mainFrame.getContentPane()).getComponent(5),
+							(JButton) ((JPanel) mainFrame.getContentPane()).getComponent(6));
 				});
 			}
 		});

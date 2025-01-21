@@ -45,6 +45,7 @@ public class Game {
 	protected InfoPanel info;
 	private Level difficulty;
 	protected int QuestionRoll;
+	public static Integer BoardColor=0;
 	// protected int[] rollsEnhancedDice;
 
 	public Game(Level difficulty, String name1, String name2) {

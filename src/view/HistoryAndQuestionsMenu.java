@@ -58,7 +58,7 @@ public class HistoryAndQuestionsMenu {
             main_frame.setVisible(false);
 
             // Open the new QuestionsTableScreen
-            QuestionsTableScreen.main(null);
+            LoginScreen.main(null);
 
             // Optionally dispose of the current frame to free resources
             main_frame.dispose();

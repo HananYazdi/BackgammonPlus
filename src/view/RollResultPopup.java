@@ -30,7 +30,7 @@ public class RollResultPopup {
 		// Create a JFrame to display the results
 		JFrame frame = new JFrame("Dice Roll Results");
 		frame.setSize(400, 300);
-		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE); // Prevent automatic closing
 		frame.setLocationRelativeTo(null);
 
 		// Create a JPanel to display the results
@@ -52,8 +52,9 @@ public class RollResultPopup {
 		panel.revalidate();
 		panel.repaint();
 
-		// Display the results after a 3-second animation
-		new Timer().schedule(new TimerTask() {
+		// Timer for delaying the results display
+		Timer timer = new Timer();
+		timer.schedule(new TimerTask() {
 			@Override
 			public void run() {
 				// Remove the GIF
@@ -112,6 +113,7 @@ public class RollResultPopup {
 				JButton closeButton = new JButton("Close");
 				closeButton.addActionListener(e -> {
 					clicked = true; // Update clicked to true when the button is pressed
+					timer.cancel(); // Cancel the timer
 					frame.dispose(); // Close the popup
 				});
 				gbc.gridx = 0;
@@ -124,6 +126,16 @@ public class RollResultPopup {
 				panel.repaint();
 			}
 		}, 3000); // Wait for 3 seconds to show results after GIF
+
+		// Add a WindowListener to handle "X" button clicks
+		frame.addWindowListener(new java.awt.event.WindowAdapter() {
+			@Override
+			public void windowClosing(java.awt.event.WindowEvent e) {
+				clicked = true; // Update clicked to true
+				timer.cancel(); // Cancel the timer if still running
+				frame.dispose(); // Close the popup
+			}
+		});
 
 		frame.setVisible(true);
 	}
